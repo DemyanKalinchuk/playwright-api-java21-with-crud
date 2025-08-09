@@ -19,12 +19,27 @@ You can override config via environment variables:
 ```
 src/
   main/java/
-    utils.base.BaseApi.java
+    - utils.base.BaseApi.java
+    - utils.helpers.RequestsHelper.java
+                   .PathsHelper
+                   .HttpHelper           
+    - utils.helpers.retryHelpers.RetryListener.java
+                                .Retry.java
+                                .Retriable.java
+    - utils.json.JsonUtils.java
+    - utils.AllureUtils.java
+    
+  main/resources/
+    - log4j.properties
+    
 src/
   test/java/
-    ApiSmokeTest.java
+    - ApiSmokeTest.java
+    - ReqResCrudTest.java
+    - JsonPlaceholderCrudTest.java
   test/resources/
-    application.properties
+    - application.properties
+    - log4j2.xml
 ```
 
 
