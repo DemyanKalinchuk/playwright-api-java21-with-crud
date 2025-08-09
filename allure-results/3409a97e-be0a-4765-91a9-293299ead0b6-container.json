@@ -1,0 +1,1 @@
+{"uuid":"3409a97e-be0a-4765-91a9-293299ead0b6","name":"utils.base.BaseApi.setUpApi","children":["5d3b1356-561b-4d42-95dc-cf3ec96a941f"],"description":"","befores":[{"name":"setUpApi","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1754776995071,"stop":1754776995072}],"afters":[],"start":1754776995071,"stop":1754776995072}

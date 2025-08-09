@@ -1,0 +1,27 @@
+URL: https://reqres.in/api/users
+Status: 201 Created
+
+Headers:
+date: Sat, 09 Aug 2025 22:03:17 GMT
+content-type: application/json; charset=utf-8
+content-length: 80
+connection: keep-alive
+cf-ray: 96ca8aebf9c28614-AMS
+access-control-allow-origin: *
+etag: W/"50-E/UZo4Emt4gjmBFOK7B+Z7BGbGQ"
+nel: {"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}
+ratelimit-limit: 100
+ratelimit-policy: 100;w=60
+ratelimit-remaining: 94
+ratelimit-reset: 58
+referrer-policy: strict-origin-when-cross-origin
+report-to: {"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=EOlbzTS2EWG31lBVP1AfJ%2FoSEAxSiIm6TD6kwZaZfQI%3D\u0026sid=c4c9725f-1ab0-44d8-820f-430df2718e11\u0026ts=1754776997"}],"max_age":3600}
+reporting-endpoints: heroku-nel="https://nel.heroku.com/reports?s=EOlbzTS2EWG31lBVP1AfJ%2FoSEAxSiIm6TD6kwZaZfQI%3D&sid=c4c9725f-1ab0-44d8-820f-430df2718e11&ts=1754776997"
+via: 1.1 heroku-router
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-request-id: 2ef399cf-1c62-6c6d-a64e-6309c8f2c3c7
+x-xss-protection: 1; mode=block
+cf-cache-status: DYNAMIC
+server: cloudflare
+server-timing: cfL4;desc="?proto=TCP&rtt=31068&min_rtt=29681&rtt_var=12121&sent=5&recv=5&lost=0&retrans=0&sent_bytes=2818&recv_bytes=751&delivery_rate=141504&cwnd=252&unsent_bytes=0&cid=9ef17051c3a16b4c&ts=101&x=0"

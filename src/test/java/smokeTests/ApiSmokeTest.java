@@ -14,7 +14,7 @@ import static utils.helpers.RequestsHelper.postJson;
 public class ApiSmokeTest extends BaseApi {
 
   @Test
-  public void getUsers_shouldReturn200_andList() throws Exception {
+  public void getUserLIstTest() throws Exception {
     var res = get(api, PathsHelper.ReqRes.users(), Map.of("page", 2));
     Assertions.assertThat(res.ok()).isTrue();
 
@@ -24,7 +24,7 @@ public class ApiSmokeTest extends BaseApi {
   }
 
   @Test
-  public void createUser_shouldReturn201_andEchoBody() throws Exception {
+  public void createUserAndCheckTheBodyTest() throws Exception {
     var res = postJson(api, PathsHelper.ReqRes.users(), Map.of("name", "morpheus", "job", "leader"));
     Assertions.assertThat(res.status()).isEqualTo(201);
 
