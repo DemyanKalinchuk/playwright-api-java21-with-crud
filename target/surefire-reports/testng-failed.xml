@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite configfailurepolicy="continue" thread-count="2" parallel="tests" name="Failed suite [Playwright API Test Suite]" guice-stage="DEVELOPMENT" verbose="0">
+  <listeners>
+    <listener class-name="utils.helpers.retryHelper.RetryListener"/>
+  </listeners>
+  <test thread-count="2" parallel="tests" name="API Smoke + CRUD Tests(failed)" verbose="0">
+    <groups>
+      <run>
+        <exclude name="prod"/>
+      </run>
+    </groups>
+    <classes>
+      <class name="smokeTests.ApiSmokeTest">
+        <methods>
+          <include name="getUsers_shouldReturn200_andList"/>
+          <include name="tearDownApi"/>
+          <include name="beforeClass"/>
+          <include name="setUpApi"/>
+          <include name="afterClass"/>
+        </methods>
+      </class> <!-- smokeTests.ApiSmokeTest -->
+      <class name="smokeTests.ReqResCrudTest">
+        <methods>
+          <include name="tearDownApi"/>
+          <include name="beforeClass"/>
+          <include name="setUpApi"/>
+          <include name="afterClass"/>
+          <include name="deleteUserTest"/>
+        </methods>
+      </class> <!-- smokeTests.ReqResCrudTest -->
+    </classes>
+  </test> <!-- API Smoke + CRUD Tests(failed) -->
+</suite> <!-- Failed suite [Playwright API Test Suite] -->

@@ -1,0 +1,3 @@
+smokeTests/ReqResCrudTest.class
+smokeTests/JsonPlaceholderCrudTest.class
+smokeTests/ApiSmokeTest.class
