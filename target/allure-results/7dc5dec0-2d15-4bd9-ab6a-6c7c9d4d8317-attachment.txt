@@ -1,0 +1,11 @@
+Path: POST /api/login
+
+Request date: Sun, 10 Aug 2025 19:36:04 GMT
+
+Time request: 199
+
+Request body: AuthRequest(email=e***@reqres.in, password=cityslicka)
+
+Response status code: 401
+
+Response: {"error":"Missing API key"}

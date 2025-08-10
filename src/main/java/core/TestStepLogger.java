@@ -23,16 +23,16 @@ public class TestStepLogger {
         log.info(BLUE_BOLD + "STEP " + logStep++ + " : " + message + RESET);
     }
 
-    public static void logPreconditionStep(String message) {
-        log.info(GREEN_BOLD + "Precondition STEP " + preConditionStepNumber++ + " : " + message + RESET);
+    public static void logPreConditionStep(String message) {
+        log.info(GREEN_BOLD + "Pre-condition STEP " + preConditionStepNumber++ + " : " + message + RESET);
     }
 
     public static void logPostConditionStep(String message) {
-        log.info(YELLOW_BOLD + "PostCondition STEP " + postConditionStepNumber++ + " : " + message + RESET);
+        log.info(YELLOW_BOLD + "Post-condition STEP " + postConditionStepNumber++ + " : " + message + RESET);
     }
 
     public static void log(String message) {
-        log.info("Additional test information: " + message);
+        log.info("Additional test information: " + message + "\n");
     }
 
     public static void resetCounters() {

@@ -1,0 +1,11 @@
+Path: POST /api/login
+
+Request date: Sun, 10 Aug 2025 19:36:04 GMT
+
+Time request: 874
+
+Request body: AuthRequest(email=p***@klaven, password=)
+
+Response status code: 401
+
+Response: {"error":"Missing API key"}

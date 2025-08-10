@@ -1,0 +1,11 @@
+Path: POST /api/register
+
+Request date: Sun, 10 Aug 2025 20:06:55 GMT
+
+Time request: 217
+
+Request body: AuthRequest(email=s***@fife, password=null)
+
+Response status code: 400
+
+Response: {"error":"Missing password"}

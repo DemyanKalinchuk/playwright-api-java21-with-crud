@@ -1,0 +1,11 @@
+Path: DELETE /api/users/2
+
+Request date: Sun, 10 Aug 2025 20:06:55 GMT
+
+Time request: 183
+
+Request body: (no body)
+
+Response status code: 204
+
+Response: 

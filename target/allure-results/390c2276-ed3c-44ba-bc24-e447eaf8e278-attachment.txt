@@ -1,0 +1,11 @@
+Path: PUT /api/users/230
+
+Request date: Sun, 10 Aug 2025 19:57:15 GMT
+
+Time request: 168
+
+Request body: User(id=230, name=Name(first=Morpheus, last=Smith), email=m***@example.com, job=zion resident, address=Address(street=Main, suite=Apt 2, city=Zion, zipcode=00001), createdAt=2025-08-10T19:57:14.931711Z, updatedAt=2025-08-10T19:57:14.931754Z)
+
+Response status code: 200
+
+Response: {"id":"230","name":{"first":"Morpheus","last":"Smith"},"email":"m***@example.com","job":"zion resident","address":{"street":"Main","suite":"Apt 2","city":"Zion","zipcode":"00001"},"createdAt":"2025-08-10T19:57:14.931711Z","updatedAt":"2025-08-10T19:57:15.168Z"}

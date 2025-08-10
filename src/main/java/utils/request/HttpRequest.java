@@ -1,6 +1,5 @@
 package utils.request;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import config.Config;
 import io.restassured.RestAssured;
 import io.restassured.config.SSLConfig;
@@ -70,7 +69,6 @@ public class HttpRequest {
         return sendRequest(deleteResponseType, baseApiUrl, headers, null, path, params);
     }
 
-    /** OPTIONS (kept as in your note) */
     public Response baseOptionsRequestWithAuthorizedUser(final String bearerToken, final String endpoint) {
         RequestSpecification spec = given()
                 .header(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON)
@@ -78,8 +76,6 @@ public class HttpRequest {
         if (consoleLog) spec.log().all();
         return spec.when().options(endpoint).then().extract().response();
     }
-
-    // ---------- Multipart upload ----------
 
     public String postRequestForUploadFile(
             final String fileToken,
@@ -145,10 +141,14 @@ public class HttpRequest {
         String response = resp.then().extract().asString();
         attach(method + " " + path, bodyStr, resp, response);
 
+        String ct = Optional.ofNullable(resp.getHeader("Content-Type")).orElse("");
+        boolean html = ct.contains("text/html") || response.startsWith("<!DOCTYPE");
+        String hint = html ? "\nHint: Response is HTML — check BASE_URL vs endpoint (e.g., /posts is JSONPlaceholder, not ReqRes)." : "";
         if (!SUCCESS_CODES.contains(resp.statusCode())) {
             throw new HttpsException("Bad request: expected status_code = " + SUCCESS_CODES +
-                    ", actual = " + resp.statusCode() + "\nError message:\n" + response);
+                    ", actual = " + resp.statusCode() + "\nError message:\n" + response + hint);
         }
+
         return response;
     }
 

@@ -14,10 +14,11 @@
     </listeners>
 
     <test name="API Smoke + CRUD Tests">
-        <packages>
-            <!-- Runs all classes in this package -->
-            <package name="smokeTests"/>
-        </packages>
+        <classes>
+            <class name="smokeTests.ApiSmokeTests"/>
+            <class name="smokeTests.AuthRegisterTests"/>
+            <class name="smokeTests.AuthSmokeTests"/>
+        </classes>
     </test>
 
 </suite>

@@ -1,0 +1,11 @@
+Path: POST /api/login
+
+Request date: Sun, 10 Aug 2025 19:38:49 GMT
+
+Time request: 358
+
+Request body: AuthRequest(email=e***@reqres.in, password=cityslicka)
+
+Response status code: 200
+
+Response: {"token":"QpwL5tke4Pnpja7X4"}

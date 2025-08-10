@@ -1,0 +1,11 @@
+Path: POST /api/register
+
+Request date: Sun, 10 Aug 2025 20:06:55 GMT
+
+Time request: 136
+
+Request body: AuthRequest(email=e***@reqres.in, password=pistol)
+
+Response status code: 200
+
+Response: {"id":4,"token":"QpwL5tke4Pnpja7X4"}

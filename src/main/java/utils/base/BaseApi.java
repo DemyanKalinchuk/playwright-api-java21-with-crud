@@ -4,35 +4,35 @@ import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.Playwright;
 import org.testng.annotations.*;
 
-import static core.TestStepLogger.logPreconditionStep;
+import static core.TestStepLogger.logPreConditionStep;
+import static core.TestStepLogger.resetCounters;
 import static utils.base.Base.testCred;
 
 public abstract class BaseApi {
   protected static Playwright playwright;
   protected APIRequestContext api;
 
-  /**
-   * Override in subclasses when you need a different host.
-   */
-  protected String baseUrl() {
-    logPreconditionStep("Init data for BaseUrl");
+  protected String getBaseUrl() {
+    logPreConditionStep("Init data for BaseUrl");
     String fromProps = testCred.baseApiUrl();
     if (fromProps != null && !fromProps.isBlank()) return fromProps;
 
     return testCred.baseApiUrl();
   }
 
-  /**
-   * Optional bearer token from env/props (if some endpoints need it).
-   */
-  public String token() {
+  public String getToken() {
     String token = testCred.baseApiToken();
     return token == null ? "" : token;
   }
 
   @BeforeClass(alwaysRun = true)
   public void beforeClass() {
-    logPreconditionStep("Init Playwright");
+    logPreConditionStep("Init Playwright");
     playwright = Playwright.create();
+  }
+
+  @AfterMethod(alwaysRun = true)
+  public void resetCountersForSteps() {
+    resetCounters();
   }
 }

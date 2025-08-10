@@ -1,0 +1,1 @@
+{"uuid":"27b70c47-7ae0-409b-ac03-ef17aa660866","name":"smokeTests.ReqResCrudTest","children":["cc4ea14b-6aab-468f-a0f0-a1376448af25"],"befores":[{"name":"beforeClass","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1754853170873,"stop":1754853174691}],"afters":[],"start":1754853170818,"stop":1754853182189}

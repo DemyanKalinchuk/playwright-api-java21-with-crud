@@ -1,0 +1,11 @@
+Path: POST /api/login
+
+Request date: Sun, 10 Aug 2025 20:06:56 GMT
+
+Time request: 143
+
+Request body: AuthRequest(email=p***@klaven, password=)
+
+Response status code: 400
+
+Response: {"error":"Missing password"}

@@ -1,0 +1,1 @@
+{"uuid":"1f0a4de7-7b0a-44ea-b5a1-13ebeeee99a5","name":"smokeTests.ApiSmokeTest","children":["0e9e4a7b-f8e0-41a9-ab8b-453906c36934"],"befores":[{"name":"beforeClass","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1754845525444,"stop":1754845529266}],"afters":[],"start":1754845525400,"stop":1754845536975}

@@ -1,0 +1,1 @@
+{"uuid":"2b6f5d35-d389-4e5a-9bc8-7df43632dcc7","name":"smokeTests.JsonPlaceholderCrudTest","children":["3bfc33d9-d1a6-49d0-8b87-2034e0a76abe"],"befores":[{"name":"beforeClass","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1754852294730,"stop":1754852298612}],"afters":[],"start":1754852294655,"stop":1754852306110}
