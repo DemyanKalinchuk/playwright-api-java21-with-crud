@@ -4,6 +4,8 @@ import utils.base.BaseApi;
 import utils.json.JsonUtils;
 import org.assertj.core.api.Assertions;
 import org.testng.annotations.Test;
+
+import static utils.base.Base.testCred;
 import static utils.helpers.PathsHelper.*;
 import static utils.helpers.RequestsHelper.*;
 
@@ -14,7 +16,7 @@ public class ReqResCrudTest extends BaseApi {
   @Override
   protected String baseUrl() {
     return System.getProperty("REQRES_BASE_URL",
-            System.getenv().getOrDefault("REQRES_BASE_URL", "https://reqres.in"));
+            System.getenv().getOrDefault("REQRES_BASE_URL", testCred.baseApiUrl()));
   }
 
 

@@ -9,12 +9,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import static core.TestStepLogger.logPostConditionStep;
+import static core.TestStepLogger.logPreconditionStep;
+
 public abstract class BaseApi {
   protected static Playwright playwright;   // shared per class
   protected APIRequestContext api;          // fresh per test
 
   /** Override in subclasses when you need a different host. */
   protected String baseUrl() {
+    logPreconditionStep("Init data for BaseUrl");
     String env = System.getProperty("BASE_URL", System.getenv("BASE_URL"));
     if (env != null && !env.isBlank()) return env;
     try (var in = getClass().getClassLoader().getResourceAsStream("application.properties")) {
@@ -35,13 +39,17 @@ public abstract class BaseApi {
   }
 
   @BeforeClass
-  public void beforeClass() { playwright = Playwright.create(); }
+  public void beforeClass() {
+    logPreconditionStep("Init Playwright");
+    playwright = Playwright.create();
+  }
 
   @AfterClass(alwaysRun = true)
   public void afterClass() { if (playwright != null) playwright.close(); }
 
   @BeforeMethod
   public void setUpApi() {
+    logPreconditionStep("Init data for test scenarios (Headers / token / requests)");
     var opts = new APIRequest.NewContextOptions().setBaseURL(baseUrl());
     String token = token();
     if (!token.isBlank()) {
@@ -53,5 +61,8 @@ public abstract class BaseApi {
   }
 
   @AfterMethod(alwaysRun = true)
-  public void tearDownApi() { if (api != null) api.dispose(); }
+  public void tearDownApi() {
+    logPostConditionStep("Close session");
+    if (api != null) api.dispose();
+  }
 }
