@@ -20,7 +20,7 @@
     <jackson.version>2.17.1</jackson.version>
     <slf4j.version>2.0.13</slf4j.version>
     <allure.testng.version>2.24.0</allure.testng.version>
-    <aspectj.version>1.9.24</aspectj.version>
+    <aspectj.version>1.9.22.1</aspectj.version>
 
     <!-- build plugins -->
     <surefire.version>3.2.5</surefire.version>
@@ -182,6 +182,7 @@
     <plugins>
       <!-- Run tests -->
 
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
@@ -214,6 +215,7 @@
   </build>
 
   <profiles>
+
     <profile>
       <id>test-env</id>
       <activation>

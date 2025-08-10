@@ -1,0 +1,11 @@
+Path: GET /api/users/330
+
+Request date: Sun, 10 Aug 2025 15:58:43 GMT
+
+Time request: 162
+
+Request body: (no body)
+
+Response status code: 404
+
+Response: {}

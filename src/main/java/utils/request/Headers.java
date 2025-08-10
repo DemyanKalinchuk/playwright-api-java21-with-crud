@@ -13,7 +13,7 @@ public class Headers {
     }
 
     public Headers addAuthHeader(String value) {
-        headers.add(new Header("Authorization", value));
+        headers.add(new Header("x-api-key", value));
         return this;
     }
 

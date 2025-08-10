@@ -9,4 +9,7 @@ public interface TestInitValues extends Config {
     @Key("base.api.url")
     String baseApiUrl();
 
+    @Key("base.api.token")
+    String baseApiToken();
+
 }

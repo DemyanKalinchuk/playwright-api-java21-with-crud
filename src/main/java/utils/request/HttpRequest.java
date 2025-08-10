@@ -19,8 +19,6 @@ import static utils.AllureUtils.*;
 
 public class HttpRequest {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
     private static final Set<Integer> SUCCESS_CODES = Set.of(200, 201, 202, 204, 205);
     private static final Set<Integer> RETRYABLE_CODES = Set.of(409, 410, 429, 500, 502);
 
@@ -55,6 +53,9 @@ public class HttpRequest {
 
     public String getRequest(Headers headers, IPath path, String... params) {
         return sendRequest(getResponseType, baseApiUrl, headers, null, path, params);
+    }
+    public String getBodyRequest(Headers headers, Object body, IPath path, String... params) {
+        return sendRequest(getResponseType, baseApiUrl, headers, body, path, params);
     }
 
     public String postRequest(Headers headers, Object body, IPath path, String... params) {
@@ -141,19 +142,19 @@ public class HttpRequest {
         }
 
         String bodyStr = safeString(body);
-        String respStr = resp.then().extract().asString();
-        attach(method + " " + path, bodyStr, resp, respStr);
+        String response = resp.then().extract().asString();
+        attach(method + " " + path, bodyStr, resp, response);
 
         if (!SUCCESS_CODES.contains(resp.statusCode())) {
             throw new HttpsException("Bad request: expected status_code = " + SUCCESS_CODES +
-                    ", actual = " + resp.statusCode() + "\nError message:\n" + respStr);
+                    ", actual = " + resp.statusCode() + "\nError message:\n" + response);
         }
-        return String.valueOf(resp);
+        return response;
     }
 
     private Map<String, Object> mergedHeaders(Headers headers) {
         Map<String, Object> map = new LinkedHashMap<>();
-        map.put(HEADER_ACCEPT_LANGUAGE, Config.defaultLang());
+        map.put(HEADER_ACCEPT_LANGUAGE, Config.acceptLang());
         map.put(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON);
 
         String token = Config.bearer();

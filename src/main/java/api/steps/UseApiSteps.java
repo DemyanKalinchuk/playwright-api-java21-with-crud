@@ -1,43 +1,74 @@
 package api.steps;
 
 import api.builders.BodyBuilder;
-import api.pojo.users.Address;
+import api.pojo.post.Post;
 import api.pojo.users.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microsoft.playwright.APIResponse;
-import com.microsoft.playwright.options.RequestOptions;
+import utils.request.Headers;
 import utils.request.HttpRequest;
 
+import static utils.base.Base.testCred;
+import static utils.json.Json.getAsText;
+import static utils.request.path.WorkPath.*;
 
-/**
- * Single entry point for API “moves”.
- * - Builds POJOs (via PojoBuilders)
- * - Calls APIs (via RequestsHelper)
- * - Masks sensitive data for logs
- * - Returns either APIResponse or strongly-typed DTOs
- */
+public class UseApiSteps {
+    private final HttpRequest http;
 
-public class UseApiSteps extends HttpRequest {
-
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    public UseApiSteps() { this.http = new HttpRequest(); }
     private final BodyBuilder bodyBuilder = new BodyBuilder();
 
-    // ===== USERS =====
-
-    /** Create a minimal user */
-    public APIResponse createUser(String first, String last, String email, String job) {
-        User payload = bodyBuilder.buildNewUser(first, last, email, job);
-        APIResponse res = post("/api/users", RequestOptions.create().setData(payload));
-        attachMasked("POST /api/users", payload, res);
-        return res;
+    // ===== Users
+    public String createUser(String first, String last, String email, String job) {
+        User body = bodyBuilder.buildNewUser(first, last, email, job);
+        return http.postRequest(new Headers().addAuthHeader(testCred.baseApiToken()), body, USERS_ROOT);
     }
 
-    /** Update a user (PUT full object) */
-    public APIResponse updateUser(String id, String first, String last, String email, String job, Address address) {
-        User payload = PojoBuilders.buildFullUser(id, first, last, email, job, address);
-        APIResponse res = requests.put("/api/users/" + id, RequestOptions.create().setData(payload));
-        attachMasked("PUT /api/users/{id}", payload, res);
-        return res;
+    /** Convenience: create user and return its id (safe JSON parsing) */
+    public String createUserAndGetId(String first, String last, String email, String job) {
+        String body = createUser(first, last, email, job); // returns String
+        return getAsText(body, "id");
     }
 
+    public String getUser(String id, String token) {
+        return http.getRequest(new Headers().addAuthHeader(token), USER_BY_ID, id);
+    }
+
+    public String updateUser(String id, String first, String last, String email, String job) {
+        var address = bodyBuilder.buildAddress("Main", "Apt 2", "Zion", "00001");
+        User body = bodyBuilder.buildFullUser(id, first, last, email, job, address);
+        return http.putRequest(new Headers().addAuthHeader(testCred.baseApiToken()), body, USER_BY_ID, id);
+    }
+
+    public String deleteUser(String id) {
+        return http.deleteRequest(new Headers().addAuthHeader(testCred.baseApiToken()), USER_BY_ID, id);
+    }
+
+    // ===== Posts
+    public String createPost(Integer userId, String title, String body, String token) {
+        Post payload = bodyBuilder.buildPost(userId, title, body);
+        return http.postRequest(new Headers().addAuthHeader(token), payload, POSTS_ROOT);
+    }
+
+    /** Convenience: create post and return its id (works when API returns numeric id) */
+    public String createPostAndGetId(Integer userId, String title, String body, String token) {
+        String resp = createPost(userId, title, body, token);
+        return getAsText(resp, "id");
+    }
+
+    public String getPost(String id) {
+        return http.getRequest(new Headers().addAuthHeader(testCred.baseApiToken()), POST_BY_ID, id);
+    }
+
+    public String updatePostPut(String id, Integer userId, String title, String body) {
+        Post payload = bodyBuilder.buildPost(userId, title, body);
+        return http.putRequest(new Headers().addAuthHeader(testCred.baseApiToken()), payload, POST_BY_ID, id);
+    }
+
+    public String updatePostPatch(String id, String title) {
+        var partial = java.util.Map.of("title", title);
+        return http.putRequest(new Headers().addAuthHeader(testCred.baseApiToken()), partial, POST_BY_ID, id); // swap to PATCH when added
+    }
+
+    public String deletePost(String id) {
+        return http.deleteRequest(new Headers().addAuthHeader(testCred.baseApiToken()), POST_BY_ID, id);
+    }
 }

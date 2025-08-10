@@ -12,21 +12,24 @@ import java.util.UUID;
 public class BodyBuilder {
 
     // ===== Users =====
-    public static Name buildName(String first, String last) {
-        return Name.builder().first(first).last(last).build();
+    public Name buildName(String first, String last) {
+        return Name.builder()
+                .first(first)
+                .last(last)
+                .build();
     }
 
-    public static Address buildAddress(String street, String suite, String city, String zipcode) {
+    public Address buildAddress(String street, String suite, String city, String zipcode) {
         return Address.builder().street(street).suite(suite).city(city).zipcode(zipcode).build();
     }
 
     /** Minimal “create user” payload often used in ReqRes-like APIs */
-    public static User buildNewUser(String first, String last, String email, String job) {
+    public User buildNewUser(String first, String last, String email, String job) {
         return User.builder()
                 .name(buildName(first, last))
                 .email(email)
                 .job(job)
-                .createdAt(Instant.now())
+                .createdAt(String.valueOf(Instant.now()))
                 .build();
     }
 
@@ -38,8 +41,8 @@ public class BodyBuilder {
                 .email(email)
                 .job(job)
                 .address(address)
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
+                .createdAt(String.valueOf(Instant.now()))
+                .updatedAt(String.valueOf(Instant.now()))
                 .build();
     }
 
@@ -51,7 +54,11 @@ public class BodyBuilder {
 
     // ===== Posts =====
     public Post buildPost(Integer userId, String title, String body) {
-        return Post.builder().userId(userId).title(title).body(body).build();
+        return Post.builder()
+                .userId(userId)
+                .title(title)
+                .body(body)
+                .build();
     }
 
     public Comment buildComment(Integer postId, String name, String email, String body) {

@@ -1,68 +1,38 @@
 package utils.base;
 
-import com.microsoft.playwright.APIRequest;
 import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.Playwright;
 import org.testng.annotations.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import static core.TestStepLogger.logPostConditionStep;
 import static core.TestStepLogger.logPreconditionStep;
+import static utils.base.Base.testCred;
 
 public abstract class BaseApi {
-  protected static Playwright playwright;   // shared per class
-  protected APIRequestContext api;          // fresh per test
+  protected static Playwright playwright;
+  protected APIRequestContext api;
 
-  /** Override in subclasses when you need a different host. */
+  /**
+   * Override in subclasses when you need a different host.
+   */
   protected String baseUrl() {
     logPreconditionStep("Init data for BaseUrl");
-    String env = System.getProperty("BASE_URL", System.getenv("BASE_URL"));
-    if (env != null && !env.isBlank()) return env;
-    try (var in = getClass().getClassLoader().getResourceAsStream("application.properties")) {
-      if (in != null) {
-        Properties p = new Properties();
-        p.load(in);
-        String fromProps = p.getProperty("BASE_URL");
-        if (fromProps != null && !fromProps.isBlank()) return fromProps;
-      }
-    } catch (Exception ignored) {}
-    return "https://reqres.in"; // sane default
+    String fromProps = testCred.baseApiUrl();
+    if (fromProps != null && !fromProps.isBlank()) return fromProps;
+
+    return testCred.baseApiUrl();
   }
 
-  /** Optional bearer token from env/props. */
-  protected String token() {
-    String t = System.getProperty("API_TOKEN", System.getenv("API_TOKEN"));
-    return t == null ? "" : t;
+  /**
+   * Optional bearer token from env/props (if some endpoints need it).
+   */
+  public String token() {
+    String token = testCred.baseApiToken();
+    return token == null ? "" : token;
   }
 
-  @BeforeClass
+  @BeforeClass(alwaysRun = true)
   public void beforeClass() {
     logPreconditionStep("Init Playwright");
     playwright = Playwright.create();
-  }
-
-  @AfterClass(alwaysRun = true)
-  public void afterClass() { if (playwright != null) playwright.close(); }
-
-  @BeforeMethod
-  public void setUpApi() {
-    logPreconditionStep("Init data for test scenarios (Headers / token / requests)");
-    var opts = new APIRequest.NewContextOptions().setBaseURL(baseUrl());
-    String token = token();
-    if (!token.isBlank()) {
-      Map<String, String> headers = new HashMap<>();
-      headers.put("Authorization", "Bearer " + token);
-      opts.setExtraHTTPHeaders(headers);
-    }
-    api = playwright.request().newContext(opts);
-  }
-
-  @AfterMethod(alwaysRun = true)
-  public void tearDownApi() {
-    logPostConditionStep("Close session");
-    if (api != null) api.dispose();
   }
 }

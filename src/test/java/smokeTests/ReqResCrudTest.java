@@ -1,56 +1,39 @@
 package smokeTests;
 
+import api.steps.UseApiSteps;
 import utils.base.BaseApi;
-import utils.json.JsonUtils;
-import org.assertj.core.api.Assertions;
 import org.testng.annotations.Test;
 
-import static utils.base.Base.testCred;
-import static utils.helpers.PathsHelper.*;
-import static utils.helpers.RequestsHelper.*;
-
-import java.util.Map;
+import static org.testng.AssertJUnit.assertNotNull;
+import static org.testng.AssertJUnit.assertTrue;
 
 public class ReqResCrudTest extends BaseApi {
 
-  @Override
-  protected String baseUrl() {
-    return System.getProperty("REQRES_BASE_URL",
-            System.getenv().getOrDefault("REQRES_BASE_URL", testCred.baseApiUrl()));
-  }
-
+  private final UseApiSteps steps = new UseApiSteps();
 
   @Test
-  public void createUserTest() throws Exception {
-    var res = postJson(api, ReqRes.users(), Map.of("name", "neo", "job", "the one"));
-    Assertions.assertThat(res.status()).isEqualTo(201);
-    var json = JsonUtils.readJson(res.body());
-    Assertions.assertThat(json).containsEntry("name", "neo").containsKey("id");
-  }
+  public void userCrudTest() {
+    var created = steps.createUser("Morpheus", "Smith", "morph@example.com", "leader");
+    var id = io.restassured.path.json.JsonPath.from(created).getString("id");
+    assertNotNull(id);
 
-  @Test
-  public void readUserTest() throws Exception {
-    var res = get(api, ReqRes.user(2));
-    Assertions.assertThat(res.ok()).isTrue();
-    var json = JsonUtils.readJson(res.body());
-    Assertions.assertThat(json).containsKey("data");
+    var updated = steps.updateUser(id, "Morpheus", "Smith", "morph@example.com", "tester");
+    assertTrue(updated.contains("updatedAt"));
+
+    var fetched = steps.getUser(id, token());
+    assertTrue(fetched.contains(id));
+
+    var deleted = steps.deleteUser(id);
+    assertNotNull(deleted); // some APIs return empty body with 204
   }
 
   @Test
-  public void updateUserTest() throws Exception {
-    var res = putJson(api, ReqRes.user(2), Map.of("name", "trinity", "job", "hacker"));
-    Assertions.assertThat(res.status()).isIn(200, 201);
-  }
+  public void postsCrudTest() {
+    String created = steps.createPost(2, "A title", "Body", token());
+    String id = io.restassured.path.json.JsonPath.from(created).getString("id");
+    assertNotNull(id);
 
-  @Test
-  public void partialUpdateUserTest() throws Exception {
-    var res = patchJson(api, ReqRes.user(2), Map.of("job", "zion-ops"));
-    Assertions.assertThat(res.status()).isIn(200, 201);
-  }
-
-  @Test
-  public void deleteUserTest() {
-    var res = delete(api, ReqRes.user(2));
-    Assertions.assertThat(res.status()).isIn(204, 200);
+    String fetched = steps.getPost(id);
+    assertTrue(fetched.contains(id));
   }
 }

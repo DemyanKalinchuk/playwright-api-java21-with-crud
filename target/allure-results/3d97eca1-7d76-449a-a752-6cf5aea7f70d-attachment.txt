@@ -1,0 +1,11 @@
+Path: POST /api/users
+
+Request date: Sun, 10 Aug 2025 16:42:05 GMT
+
+Time request: 909
+
+Request body: User(id=null, name=Name(first=Morpheus, last=Smith), email=m***@example.com, job=leader, address=null, createdAt=2025-08-10T16:42:02.976917Z, updatedAt=null)
+
+Response status code: 201
+
+Response: {"name":{"first":"Morpheus","last":"Smith"},"email":"m***@example.com","job":"leader","createdAt":"2025-08-10T16:42:05.058Z","id":"358"}

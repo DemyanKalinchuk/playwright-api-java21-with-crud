@@ -20,6 +20,6 @@ public class User {
     private String email;
     private String job;
     private Address address;
-    private Instant createdAt;
-    private Instant updatedAt;
+    private String createdAt;
+    private String updatedAt;
 }

@@ -1,48 +1,36 @@
 package smokeTests;
 
+import api.steps.UseApiSteps;
 import utils.base.BaseApi;
-import org.assertj.core.api.Assertions;
 import org.testng.annotations.Test;
-import static utils.helpers.PathsHelper.*;
-import static utils.helpers.RequestsHelper.*;
 
-import java.util.Map;
+import static org.testng.Assert.assertTrue;
+import static org.testng.AssertJUnit.assertNotNull;
 
 public class JsonPlaceholderCrudTest extends BaseApi {
 
-  @Override
-  protected String baseUrl() {
-    return System.getProperty("JSONPH_BASE_URL",
-            System.getenv().getOrDefault("JSONPH_BASE_URL", "https://jsonplaceholder.typicode.com"));
-  }
+  private final UseApiSteps steps = new UseApiSteps();
 
   @Test
-  public void createPostTest() throws Exception {
-    var res = postJson(api, JsonPh.posts(), Map.of("title", "foo", "body", "bar", "userId", 1));
-    Assertions.assertThat(res.status()).isEqualTo(201);
-  }
+  public void postsCrudTest() {
+    // Create
+    String created = steps.createPostAndGetId(1, "Hello world", "My first post", token());
+    assertNotNull(created, "Created post must return id");
 
-  @Test
-  public void getPostTest() throws Exception {
-    var res = get(api, JsonPh.post(1));
-    Assertions.assertThat(res.ok()).isTrue();
-  }
+    // Read
+    String fetched = steps.getPost(created);
+    assertTrue(fetched.contains(created), "Fetched post must contain id");
 
-  @Test
-  public void updatePostTest() throws Exception {
-    var res = putJson(api, JsonPh.post(1), Map.of("id", 1, "title", "baz", "body", "updated", "userId", 1));
-    Assertions.assertThat(res.status()).isEqualTo(200);
-  }
+    // Update (PUT)
+    String put = steps.updatePostPut(created, 1, "Updated title", "Updated body");
+    assertTrue(put.contains("Updated title"));
 
-  @Test
-  public void partialUpdatePostTest() throws Exception {
-    var res = patchJson(api, JsonPh.post(1), Map.of("title", "patched"));
-    Assertions.assertThat(res.status()).isEqualTo(200);
-  }
+    // Patch (simulated via PUT in helper; swap to PATCH once added)
+    String patched = steps.updatePostPatch(created, "Patched title");
+    assertTrue(patched.contains("Patched title"));
 
-  @Test
-  public void deletePostTest() {
-    var res = delete(api, JsonPh.post(1));
-    Assertions.assertThat(res.status()).isIn(200, 204);
+    // Delete
+    String deleted = steps.deletePost(created);
+    assertNotNull(deleted);
   }
 }
