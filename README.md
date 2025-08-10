@@ -40,6 +40,21 @@ src/
   test/resources/
     - application.properties
     - log4j2.xml
+    
+    src
+ └─ main
+    └─ java
+       └─ api
+          ├─ pojo
+          │  ├─ users
+          │  │  ├─ Name.java
+          │  │  ├─ Address.java
+          │  │  └─ User.java
+          │  └─ posts
+          │     ├─ Post.java
+          │     └─ Comment.java
+          └─ builders
+             └─ PojoBuilders.java
 ```
 
 

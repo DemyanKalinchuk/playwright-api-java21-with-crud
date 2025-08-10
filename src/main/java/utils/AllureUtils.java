@@ -2,6 +2,7 @@ package utils;
 
 import com.microsoft.playwright.APIResponse;
 import io.qameta.allure.Allure;
+import io.restassured.response.Response;
 import utils.json.JsonUtils;
 
 import java.io.ByteArrayInputStream;
@@ -47,5 +48,28 @@ public final class AllureUtils {
         } catch (Exception e) {
             attachText(name + " BODY (raw)", new String(res.body(), StandardCharsets.UTF_8));
         }
+    }
+
+    public static String getAllureReportMessage(Response resp, String response, Object body, String path) {
+
+        String request_date = resp.getHeader("Date");
+        String timeRequest = String.valueOf(resp.getTime());
+        String responseStatus = String.valueOf(resp.getStatusCode());
+        String prettyRequest = body != null ? body.toString() : "";
+
+        String allure_report = "Path: %s" +
+                "\n\nRequest date: %s" +
+                "\n\nTime request: %s" +
+                "\n\nRequest body: %s" +
+                "\n\nResponse status code: %s" +
+                "\n\nResponse: %s";
+
+        allure_report = String.format(allure_report, path, request_date, timeRequest, prettyRequest, responseStatus,
+                response);
+        return allure_report;
+    }
+
+    public static void addAttachmentToReport(String title, String value) {
+        Allure.addAttachment(title, value);
     }
 }

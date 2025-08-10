@@ -3,7 +3,6 @@ package smokeTests;
 import org.assertj.core.api.Assertions;
 import org.testng.annotations.Test;
 import utils.base.BaseApi;
-import utils.helpers.PathsHelper;
 import utils.json.JsonUtils;
 
 import static utils.helpers.RequestsHelper.*;

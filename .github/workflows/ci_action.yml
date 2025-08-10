@@ -1,64 +1,28 @@
-name: CI_ACTION
-
+name: CI
 on:
-  push:
-    branches: [ main, master ]
+  push: { branches: [ master, main ] }
   pull_request:
-    branches: [ main, master ]
-
-permissions:
-  contents: read
-
-concurrency:
-  group: ci_action-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
-    env:
-      # Configure your endpoints/tokens as needed (can also use repo/org secrets)
-      BASE_URL: ${{ secrets.BASE_URL }}
-      API_TOKEN: ${{ secrets.API_TOKEN }}
-      REQRES_BASE_URL: https://reqres.in
-      JSONPH_BASE_URL: https://jsonplaceholder.typicode.com
-      MAVEN_OPTS: -Xmx1g
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 21
+      - uses: actions/checkout@v4
+      - name: Set up Temurin 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '21'
+          java-version: "21"
           cache: maven
-
-      # API-only tests don't strictly need browsers, but keeping this is harmless.
-      - name: (Optional) Install Playwright browsers
-        run: mvn -q exec:java -Pinstall-browsers || true
-
       - name: Run tests
-        run: mvn -q -e -DskipTests=false test
-
-      - name: Upload Surefire reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: surefire-reports
-          path: |
-            **/target/surefire-reports/**
-          if-no-files-found: warn
-          retention-days: 14
-
+        run: mvn -q -B -Ptest test
+        env:
+          BASE_URL: https://reqres.in
       - name: Upload Allure results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: allure-results
           path: |
-            **/target/allure-results/**
-          if-no-files-found: warn
-          retention-days: 14
+            **/allure-results/**
+            target/surefire-reports/**
