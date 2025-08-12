@@ -12,6 +12,10 @@
   <properties>
     <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.release>21</maven.compiler.release>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
 
     <!-- libs -->
     <testng.version>7.10.2</testng.version>
@@ -197,6 +201,18 @@
             <include>**/smokeTests/AuthSmokeTests.java</include>
           </includes>
           -->
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven.compiler.plugin.version}</version>
+        <configuration>
+          <release>${maven.compiler.release}</release>
+          <!-- the next two are redundant with <release>, but harmless if you like being explicit -->
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
         </configuration>
       </plugin>
 

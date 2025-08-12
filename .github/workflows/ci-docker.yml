@@ -50,7 +50,7 @@ jobs:
 
       - name: Run Maven tests
         run: mvn clean test -Dtest="${TESTS}"
-        
+
       - name: Upload Surefire reports
         if: always()
         uses: actions/upload-artifact@v4
