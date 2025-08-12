@@ -7,43 +7,45 @@
   <artifactId>playwright-api-java21</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <name>Playwright API (Java 21)</name>
-  <description>Java 21 + Maven + Playwright API testing with TestNG, AssertJ, Allure</description>
+  <description>Java 21 + Maven + API testing with TestNG, RestAssured, Allure</description>
 
   <properties>
     <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <!-- libs -->
-    <playwright.version>1.47.0</playwright.version>
     <testng.version>7.10.2</testng.version>
     <assertj.version>3.26.3</assertj.version>
     <jackson.version>2.17.1</jackson.version>
     <slf4j.version>2.0.13</slf4j.version>
+    <log4j2.version>2.22.1</log4j2.version>
     <allure.testng.version>2.24.0</allure.testng.version>
     <aspectj.version>1.9.22.1</aspectj.version>
+    <restassured.version>5.5.0</restassured.version>
+    <playwright.version>1.47.0</playwright.version> <!-- keep if you still need Playwright APIs -->
 
     <!-- build plugins -->
-    <surefire.version>3.2.5</surefire.version>
-    <exec.version>3.5.0</exec.version>
+    <surefire.version>3.5.2</surefire.version>
+    <dependency.plugin.version>3.6.1</dependency.plugin.version>
+    <allure.maven.plugin.version>2.12.0</allure.maven.plugin.version>
   </properties>
 
   <dependencies>
-    <!-- Playwright (test scope is fine for API tests) -->
+    <!-- Rest Assured (used in main utils.request.HttpRequest) -->
     <dependency>
-      <groupId>com.microsoft.playwright</groupId>
-      <artifactId>playwright</artifactId>
-      <version>${playwright.version}</version>
-      <scope>test</scope>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <version>${restassured.version}</version>
+      <scope>compile</scope>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+    <!-- Jackson for JSON -->
     <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-      <version>2.23.1</version>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+      <scope>compile</scope>
     </dependency>
-
-
 
     <!-- TestNG -->
     <dependency>
@@ -53,28 +55,7 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Lombok -->
-    <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.18.38</version>
-    </dependency>
-
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.17</version>
-    </dependency>
-
-
-    <dependency>
-      <groupId>org.aeonbits.owner</groupId>
-      <artifactId>owner</artifactId>
-      <version>1.0.12</version>
-    </dependency>
-
-    <!-- AssertJ -->
+    <!-- AssertJ (tests) -->
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
@@ -82,6 +63,15 @@
       <scope>test</scope>
     </dependency>
 
+    <!-- Allure TestNG adapter -->
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-testng</artifactId>
+      <version>${allure.testng.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- AspectJ weaver for Allure step interception (test scope) -->
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
@@ -89,130 +79,63 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Jackson -->
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>io.qameta.allure</groupId>
-      <artifactId>allure-maven</artifactId>
-      <version>2.15.2</version>
-    </dependency>
-
-    <!-- Simple SLF4J logger for tests -->
+    <!-- Logging: log4j2 + slf4j bridge -->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
-      <version>2.22.1</version>
-      <scope>test</scope>
+      <version>${log4j2.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
-      <version>2.22.1</version>
-      <scope>test</scope>
+      <version>${log4j2.version}</version>
     </dependency>
-    <!-- SLF4J → Log4j2 bridge -->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-slf4j2-impl</artifactId>
-      <version>2.22.1</version>
+      <version>${log4j2.version}</version>
       <scope>test</scope>
     </dependency>
-    <!-- Allure TestNG adapter (results under target/allure-results) -->
+
+    <!-- Lombok -->
     <dependency>
-      <groupId>io.qameta.allure</groupId>
-      <artifactId>allure-testng</artifactId>
-      <version>${allure.testng.version}</version>
-      <scope>test</scope>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.38</version>
+      <scope>provided</scope>
     </dependency>
+
+    <!-- Owner (if you actually use it; else remove) -->
     <dependency>
-      <groupId>com.microsoft.playwright</groupId>
-      <artifactId>playwright</artifactId>
-      <version>1.54.0</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.19.0</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.qameta.allure</groupId>
-      <artifactId>allure-java-commons</artifactId>
-      <version>2.28.0</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.2</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-      <version>7.10.2</version>
+      <groupId>org.aeonbits.owner</groupId>
+      <artifactId>owner</artifactId>
+      <version>1.0.12</version>
       <scope>compile</scope>
     </dependency>
 
-    <!-- pom.xml dependency -->
+    <!-- Playwright (only if still needed; otherwise remove both Playwright deps entirely) -->
+    <dependency>
+      <groupId>com.microsoft.playwright</groupId>
+      <artifactId>playwright</artifactId>
+      <version>${playwright.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- JSON Schema Validator (tests) -->
     <dependency>
       <groupId>com.networknt</groupId>
       <artifactId>json-schema-validator</artifactId>
       <version>1.4.1</version>
       <scope>test</scope>
     </dependency>
-
-    <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
-    <dependency>
-      <groupId>io.rest-assured</groupId>
-      <artifactId>rest-assured</artifactId>
-      <version>5.5.5</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.rest-assured</groupId>
-      <artifactId>rest-assured</artifactId>
-      <version>5.5.5</version>
-      <scope>compile</scope>
-    </dependency>
-
   </dependencies>
 
   <build>
     <plugins>
-      <!-- Run tests -->
-
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>${exec.version}</version>
-        <executions>
-          <execution>
-            <id>playwright-install</id>
-            <phase>none</phase>
-            <goals><goal>java</goal></goals>
-            <configuration>
-              <mainClass>com.microsoft.playwright.CLI</mainClass>
-              <arguments>
-                <argument>install</argument>
-              </arguments>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.6.1</version>
+        <version>${dependency.plugin.version}</version>
         <executions>
           <execution>
             <id>copy-aspectj</id>
@@ -233,34 +156,43 @@
         </executions>
       </plugin>
 
+      <!-- Surefire runs TestNG tests; pass the agent from target/ -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.5.2</version>
+        <version>${surefire.version}</version>
         <configuration>
+          <useSystemClassLoader>true</useSystemClassLoader>
           <argLine>@{argLine} -javaagent:${project.build.directory}/aspectjweaver.jar</argLine>
+          <!-- run your smoke classes by default; or comment this and use -Dtest=... in CI -->
+          <!--
+          <includes>
+            <include>**/smokeTests/ApiSmokeTests.java</include>
+            <include>**/smokeTests/AuthRegisterTests.java</include>
+            <include>**/smokeTests/AuthSmokeTests.java</include>
+          </includes>
+          -->
         </configuration>
       </plugin>
 
+      <!-- Allure Maven plugin (optional: for report generation goals) -->
       <plugin>
         <groupId>io.qameta.allure</groupId>
         <artifactId>allure-maven</artifactId>
-        <version>2.12.0</version>
+        <version>${allure.maven.plugin.version}</version>
         <configuration>
           <reportVersion>2.25.0</reportVersion>
-          <resultsDirectory>allure-results</resultsDirectory>
+          <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
         </configuration>
       </plugin>
     </plugins>
   </build>
 
+  <!-- Profiles WITHOUT overriding the -javaagent path -->
   <profiles>
-
     <profile>
       <id>test-env</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
+      <activation><activeByDefault>true</activeByDefault></activation>
       <properties>
         <staging>test</staging>
       </properties>
@@ -269,24 +201,19 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.5.2</version>
+            <version>${surefire.version}</version>
             <configuration>
-              <argLine>
-                -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
-              </argLine>
+              <!-- keep suite if you really use it; else remove -->
+              <!-- <suiteXmlFiles><suiteXmlFile>TestStagePropertiesTestNG.xml</suiteXmlFile></suiteXmlFiles> -->
               <systemPropertyVariables>
-                <name>allure.results.directory</name>
-                <value>${project.build.directory}/allure-results</value>
-                <allure.results.directory>target/allure-results</allure.results.directory>
+                <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
               </systemPropertyVariables>
-              <suiteXmlFiles>
-                <suiteXmlFile>TestStagePropertiesTestNG.xml</suiteXmlFile>
-              </suiteXmlFiles>
             </configuration>
           </plugin>
         </plugins>
       </build>
     </profile>
+
     <profile>
       <id>prod-env</id>
       <properties>
@@ -297,19 +224,12 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.5.2</version>
+            <version>${surefire.version}</version>
             <configuration>
-              <argLine>
-                -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
-              </argLine>
+              <!-- <suiteXmlFiles><suiteXmlFile>ProdStagePropertiesTestNG.xml</suiteXmlFile></suiteXmlFiles> -->
               <systemPropertyVariables>
-                <name>allure.results.directory</name>
-                <value>${project.build.directory}/allure-results</value>
-                <allure.results.directory>target/allure-results</allure.results.directory>
+                <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
               </systemPropertyVariables>
-              <suiteXmlFiles>
-                <suiteXmlFile>ProdStagePropertiesTestNG.xml</suiteXmlFile>
-              </suiteXmlFiles>
             </configuration>
           </plugin>
         </plugins>
