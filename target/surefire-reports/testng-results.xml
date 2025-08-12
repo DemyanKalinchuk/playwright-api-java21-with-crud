@@ -2,52 +2,52 @@
 <testng-results ignored="0" total="5" passed="5" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-08-12T23:08:32 EEST" name="Surefire suite" finished-at="2025-08-12T23:08:45 EEST" duration-ms="12352">
+  <suite started-at="2025-08-12T23:32:14 EEST" name="Surefire suite" finished-at="2025-08-12T23:32:27 EEST" duration-ms="12163">
     <groups>
     </groups>
-    <test started-at="2025-08-12T23:08:32 EEST" name="Surefire test" finished-at="2025-08-12T23:08:45 EEST" duration-ms="12352">
+    <test started-at="2025-08-12T23:32:14 EEST" name="Surefire test" finished-at="2025-08-12T23:32:27 EEST" duration-ms="12163">
       <class name="smokeTests.AuthSmokeTests">
-        <test-method is-config="true" signature="beforeClass()[pri:0, instance:smokeTests.AuthSmokeTests@80b122b]" started-at="2025-08-12T23:08:43 EEST" name="beforeClass" finished-at="2025-08-12T23:08:44 EEST" duration-ms="415" status="PASS">
+        <test-method is-config="true" signature="beforeClass()[pri:0, instance:smokeTests.AuthSmokeTests@60e3c26e]" started-at="2025-08-12T23:32:25 EEST" name="beforeClass" finished-at="2025-08-12T23:32:26 EEST" duration-ms="351" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method signature="loginAndReturnTokenTest()[pri:0, instance:smokeTests.AuthSmokeTests@80b122b]" started-at="2025-08-12T23:08:44 EEST" name="loginAndReturnTokenTest" description="Try to auth with positive data" finished-at="2025-08-12T23:08:44 EEST" duration-ms="144" status="PASS">
+        <test-method signature="loginAndReturnTokenTest()[pri:0, instance:smokeTests.AuthSmokeTests@60e3c26e]" started-at="2025-08-12T23:32:26 EEST" name="loginAndReturnTokenTest" description="Try to auth with positive data" finished-at="2025-08-12T23:32:26 EEST" duration-ms="198" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- loginAndReturnTokenTest -->
-        <test-method is-config="true" signature="resetCountersForSteps()[pri:0, instance:smokeTests.AuthSmokeTests@80b122b]" started-at="2025-08-12T23:08:44 EEST" name="resetCountersForSteps" finished-at="2025-08-12T23:08:44 EEST" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="resetCountersForSteps()[pri:0, instance:smokeTests.AuthSmokeTests@60e3c26e]" started-at="2025-08-12T23:32:26 EEST" name="resetCountersForSteps" finished-at="2025-08-12T23:32:26 EEST" duration-ms="0" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- resetCountersForSteps -->
-        <test-method signature="loginWithEmptyPassAndCheckAnErrorTest()[pri:0, instance:smokeTests.AuthSmokeTests@80b122b]" started-at="2025-08-12T23:08:44 EEST" name="loginWithEmptyPassAndCheckAnErrorTest" description="Try to auth with negative data" finished-at="2025-08-12T23:08:44 EEST" duration-ms="107" status="PASS">
+        <test-method signature="loginWithEmptyPassAndCheckAnErrorTest()[pri:0, instance:smokeTests.AuthSmokeTests@60e3c26e]" started-at="2025-08-12T23:32:26 EEST" name="loginWithEmptyPassAndCheckAnErrorTest" description="Try to auth with negative data" finished-at="2025-08-12T23:32:26 EEST" duration-ms="212" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- loginWithEmptyPassAndCheckAnErrorTest -->
-        <test-method is-config="true" signature="resetCountersForSteps()[pri:0, instance:smokeTests.AuthSmokeTests@80b122b]" started-at="2025-08-12T23:08:44 EEST" name="resetCountersForSteps" finished-at="2025-08-12T23:08:44 EEST" duration-ms="1" status="PASS">
+        <test-method is-config="true" signature="resetCountersForSteps()[pri:0, instance:smokeTests.AuthSmokeTests@60e3c26e]" started-at="2025-08-12T23:32:26 EEST" name="resetCountersForSteps" finished-at="2025-08-12T23:32:26 EEST" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- resetCountersForSteps -->
       </class> <!-- smokeTests.AuthSmokeTests -->
       <class name="smokeTests.ApiSmokeTests">
-        <test-method is-config="true" signature="beforeClass()[pri:0, instance:smokeTests.ApiSmokeTests@6af90849]" started-at="2025-08-12T23:08:32 EEST" name="beforeClass" finished-at="2025-08-12T23:08:35 EEST" duration-ms="3164" status="PASS">
+        <test-method is-config="true" signature="beforeClass()[pri:0, instance:smokeTests.ApiSmokeTests@7dcb42a9]" started-at="2025-08-12T23:32:14 EEST" name="beforeClass" finished-at="2025-08-12T23:32:17 EEST" duration-ms="3046" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method signature="userCrudTest()[pri:0, instance:smokeTests.ApiSmokeTests@6af90849]" started-at="2025-08-12T23:08:35 EEST" name="userCrudTest" finished-at="2025-08-12T23:08:43 EEST" duration-ms="7917" status="PASS">
+        <test-method signature="userCrudTest()[pri:0, instance:smokeTests.ApiSmokeTests@7dcb42a9]" started-at="2025-08-12T23:32:17 EEST" name="userCrudTest" finished-at="2025-08-12T23:32:25 EEST" duration-ms="7781" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- userCrudTest -->
-        <test-method is-config="true" signature="resetCountersForSteps()[pri:0, instance:smokeTests.ApiSmokeTests@6af90849]" started-at="2025-08-12T23:08:43 EEST" name="resetCountersForSteps" finished-at="2025-08-12T23:08:43 EEST" duration-ms="1" status="PASS">
+        <test-method is-config="true" signature="resetCountersForSteps()[pri:0, instance:smokeTests.ApiSmokeTests@7dcb42a9]" started-at="2025-08-12T23:32:25 EEST" name="resetCountersForSteps" finished-at="2025-08-12T23:32:25 EEST" duration-ms="0" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- resetCountersForSteps -->
       </class> <!-- smokeTests.ApiSmokeTests -->
       <class name="smokeTests.AuthRegisterTests">
-        <test-method signature="registerTest()[pri:0, instance:smokeTests.AuthRegisterTests@999b951]" started-at="2025-08-12T23:08:44 EEST" name="registerTest" description="Try to register with positive data" finished-at="2025-08-12T23:08:44 EEST" duration-ms="206" status="PASS">
+        <test-method signature="registerTest()[pri:0, instance:smokeTests.AuthRegisterTests@80b122b]" started-at="2025-08-12T23:32:26 EEST" name="registerTest" description="Try to register with positive data" finished-at="2025-08-12T23:32:26 EEST" duration-ms="187" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- registerTest -->
-        <test-method signature="registerWithoutPassTest()[pri:0, instance:smokeTests.AuthRegisterTests@999b951]" started-at="2025-08-12T23:08:44 EEST" name="registerWithoutPassTest" description="Try to register with negative data" finished-at="2025-08-12T23:08:45 EEST" duration-ms="239" status="PASS">
+        <test-method signature="registerWithoutPassTest()[pri:0, instance:smokeTests.AuthRegisterTests@80b122b]" started-at="2025-08-12T23:32:26 EEST" name="registerWithoutPassTest" description="Try to register with negative data" finished-at="2025-08-12T23:32:27 EEST" duration-ms="229" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- registerWithoutPassTest -->

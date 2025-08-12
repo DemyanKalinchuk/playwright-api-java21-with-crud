@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="TestSuite" time="14.354" tests="5" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="TestSuite" time="13.959" tests="5" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -13,7 +13,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="/Users/user_kalinchuk/Library/Java/JavaVirtualMachines/openjdk-21.0.2/Contents/Home/lib"/>
-    <property name="sun.java.command" value="/Users/user_kalinchuk/Desktop/playwright-api-java21-with-crud/target/surefire/surefirebooter-20250812230829840_3.jar /Users/user_kalinchuk/Desktop/playwright-api-java21-with-crud/target/surefire 2025-08-12T23-08-29_723-jvmRun1 surefire-20250812230829840_1tmp surefire_0-20250812230829840_2tmp"/>
+    <property name="sun.java.command" value="/Users/user_kalinchuk/Desktop/playwright-api-java21-with-crud/target/surefire/surefirebooter-20250812233212298_3.jar /Users/user_kalinchuk/Desktop/playwright-api-java21-with-crud/target/surefire 2025-08-12T23-32-12_215-jvmRun1 surefire-20250812233212298_1tmp surefire_0-20250812233212298_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/Users/user_kalinchuk/Desktop/playwright-api-java21-with-crud/target/test-classes:/Users/user_kalinchuk/Desktop/playwright-api-java21-with-crud/target/classes:/Users/user_kalinchuk/.m2/repository/io/rest-assured/rest-assured/5.5.0/rest-assured-5.5.0.jar:/Users/user_kalinchuk/.m2/repository/org/apache/groovy/groovy/4.0.22/groovy-4.0.22.jar:/Users/user_kalinchuk/.m2/repository/org/apache/groovy/groovy-xml/4.0.22/groovy-xml-4.0.22.jar:/Users/user_kalinchuk/.m2/repository/org/apache/httpcomponents/httpclient/4.5.13/httpclient-4.5.13.jar:/Users/user_kalinchuk/.m2/repository/org/apache/httpcomponents/httpcore/4.4.13/httpcore-4.4.13.jar:/Users/user_kalinchuk/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/Users/user_kalinchuk/.m2/repository/commons-codec/commons-codec/1.11/commons-codec-1.11.jar:/Users/user_kalinchuk/.m2/repository/org/apache/httpcomponents/httpmime/4.5.13/httpmime-4.5.13.jar:/Users/user_kalinchuk/.m2/repository/org/hamcrest/hamcrest/2.2/hamcrest-2.2.jar:/Users/user_kalinchuk/.m2/repository/org/ccil/cowan/tagsoup/tagsoup/1.2.1/tagsoup-1.2.1.jar:/Users/user_kalinchuk/.m2/repository/io/rest-assured/json-path/5.5.0/json-path-5.5.0.jar:/Users/user_kalinchuk/.m2/repository/org/apache/groovy/groovy-json/4.0.22/groovy-json-4.0.22.jar:/Users/user_kalinchuk/.m2/repository/io/rest-assured/rest-assured-common/5.5.0/rest-assured-common-5.5.0.jar:/Users/user_kalinchuk/.m2/repository/io/rest-assured/xml-path/5.5.0/xml-path-5.5.0.jar:/Users/user_kalinchuk/.m2/repository/org/apache/commons/commons-lang3/3.11/commons-lang3-3.11.jar:/Users/user_kalinchuk/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.17.1/jackson-databind-2.17.1.jar:/Users/user_kalinchuk/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.17.1/jackson-annotations-2.17.1.jar:/Users/user_kalinchuk/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.17.1/jackson-core-2.17.1.jar:/Users/user_kalinchuk/.m2/repository/org/testng/testng/7.10.2/testng-7.10.2.jar:/Users/user_kalinchuk/.m2/repository/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar:/Users/user_kalinchuk/.m2/repository/com/beust/jcommander/1.82/jcommander-1.82.jar:/Users/user_kalinchuk/.m2/repository/org/webjars/jquery/3.7.1/jquery-3.7.1.jar:/Users/user_kalinchuk/.m2/repository/org/assertj/assertj-core/3.26.3/assertj-core-3.26.3.jar:/Users/user_kalinchuk/.m2/repository/net/bytebuddy/byte-buddy/1.14.18/byte-buddy-1.14.18.jar:/Users/user_kalinchuk/.m2/repository/io/qameta/allure/allure-testng/2.24.0/allure-testng-2.24.0.jar:/Users/user_kalinchuk/.m2/repository/io/qameta/allure/allure-test-filter/2.24.0/allure-test-filter-2.24.0.jar:/Users/user_kalinchuk/.m2/repository/org/aspectj/aspectjweaver/1.9.22.1/aspectjweaver-1.9.22.1.jar:/Users/user_kalinchuk/.m2/repository/org/apache/logging/log4j/log4j-api/2.22.1/log4j-api-2.22.1.jar:/Users/user_kalinchuk/.m2/repository/org/apache/logging/log4j/log4j-core/2.22.1/log4j-core-2.22.1.jar:/Users/user_kalinchuk/.m2/repository/org/apache/logging/log4j/log4j-slf4j2-impl/2.22.1/log4j-slf4j2-impl-2.22.1.jar:/Users/user_kalinchuk/.m2/repository/log4j/log4j/1.2.17/log4j-1.2.17.jar:/Users/user_kalinchuk/.m2/repository/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar:/Users/user_kalinchuk/.m2/repository/org/aeonbits/owner/owner/1.0.12/owner-1.0.12.jar:/Users/user_kalinchuk/.m2/repository/com/microsoft/playwright/playwright/1.54.0/playwright-1.54.0.jar:/Users/user_kalinchuk/.m2/repository/com/google/code/gson/gson/2.12.1/gson-2.12.1.jar:/Users/user_kalinchuk/.m2/repository/com/google/errorprone/error_prone_annotations/2.36.0/error_prone_annotations-2.36.0.jar:/Users/user_kalinchuk/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/Users/user_kalinchuk/.m2/repository/com/microsoft/playwright/driver/1.54.0/driver-1.54.0.jar:/Users/user_kalinchuk/.m2/repository/com/microsoft/playwright/driver-bundle/1.54.0/driver-bundle-1.54.0.jar:/Users/user_kalinchuk/.m2/repository/com/networknt/json-schema-validator/1.4.1/json-schema-validator-1.4.1.jar:/Users/user_kalinchuk/.m2/repository/com/ethlo/time/itu/1.10.2/itu-1.10.2.jar:/Users/user_kalinchuk/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-yaml/2.17.1/jackson-dataformat-yaml-2.17.1.jar:/Users/user_kalinchuk/.m2/repository/org/yaml/snakeyaml/2.2/snakeyaml-2.2.jar:/Users/user_kalinchuk/.m2/repository/io/qameta/allure/allure-java-commons/2.28.0/allure-java-commons-2.28.0.jar:/Users/user_kalinchuk/.m2/repository/io/qameta/allure/allure-model/2.28.0/allure-model-2.28.0.jar:"/>
     <property name="test" value="smokeTests.ApiSmokeTests,smokeTests.AuthRegisterTests,smokeTests.AuthSmokeTests"/>
@@ -31,7 +31,7 @@
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="apple.awt.application.name" value="ForkedBooter"/>
-    <property name="surefire.real.class.path" value="/Users/user_kalinchuk/Desktop/playwright-api-java21-with-crud/target/surefire/surefirebooter-20250812230829840_3.jar"/>
+    <property name="surefire.real.class.path" value="/Users/user_kalinchuk/Desktop/playwright-api-java21-with-crud/target/surefire/surefirebooter-20250812233212298_3.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.2+13-58"/>
     <property name="user.name" value="user_kalinchuk"/>
@@ -58,7 +58,7 @@
     <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="userCrudTest" classname="smokeTests.ApiSmokeTests" time="7.999">
+  <testcase name="userCrudTest" classname="smokeTests.ApiSmokeTests" time="7.865">
     <system-out><![CDATA[&amp#27;[1;32mPre-condition STEP 1 : Init Playwright&amp#27;[0m
 &amp#27;[1;34mSTEP 1 : Create and check is user user created correctly&amp#27;[0m
 &amp#27;[1;34mSTEP 2 : Update user&amp#27;[0m
@@ -70,7 +70,7 @@ SLF4J: Defaulting to no-operation (NOP) logger implementation
 SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
 ]]></system-err>
   </testcase>
-  <testcase name="loginAndReturnTokenTest" classname="smokeTests.AuthSmokeTests" time="0.145">
+  <testcase name="loginAndReturnTokenTest" classname="smokeTests.AuthSmokeTests" time="0.199">
     <system-out><![CDATA[&amp#27;[0m
 &amp#27;[1;32mPre-condition STEP 1 : Init Playwright&amp#27;[0m
 &amp#27;[1;34mSTEP 1 : Try to auth with cred's&amp#27;[0m
@@ -78,19 +78,19 @@ SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further detail
 &amp#27;[1;34mSTEP 3 : Check errors&amp#27;[0m
 ]]></system-out>
   </testcase>
-  <testcase name="loginWithEmptyPassAndCheckAnErrorTest" classname="smokeTests.AuthSmokeTests" time="0.124">
+  <testcase name="loginWithEmptyPassAndCheckAnErrorTest" classname="smokeTests.AuthSmokeTests" time="0.212">
     <system-out><![CDATA[&amp#27;[0m
 &amp#27;[1;34mSTEP 1 : Try to auth without pass&amp#27;[0m
 ]]></system-out>
   </testcase>
-  <testcase name="registerTest" classname="smokeTests.AuthRegisterTests" time="0.192">
+  <testcase name="registerTest" classname="smokeTests.AuthRegisterTests" time="0.188">
     <system-out><![CDATA[&amp#27;[0m
 &amp#27;[1;34mSTEP 1 : Try to register with cred's&amp#27;[0m
 &amp#27;[1;34mSTEP 2 : Get created user&amp#27;[0m
 &amp#27;[1;34mSTEP 3 : Check an errors&amp#27;[0m
 ]]></system-out>
   </testcase>
-  <testcase name="registerWithoutPassTest" classname="smokeTests.AuthRegisterTests" time="0.241">
+  <testcase name="registerWithoutPassTest" classname="smokeTests.AuthRegisterTests" time="0.23">
     <system-out><![CDATA[&amp#27;[1;34mSTEP 4 : Try to register without pass&amp#27;[0m
 ]]></system-out>
   </testcase>
