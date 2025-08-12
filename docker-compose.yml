@@ -1,0 +1,14 @@
+services:
+  smoke:
+    build: .
+    working_dir: /app
+    environment:
+      BASE_URL: https://reqres.in
+      ACCEPT_LANGUAGE: en-US
+      REQRES_READ_API_KEY: reqres-free-v1
+      API_CONSOLE_LOG: "false"
+      RETRY_MAX: "2"
+      TESTS: "smokeTests.ApiSmokeTests,smokeTests.AuthRegisterTests,smokeTests.AuthSmokeTests"
+    volumes:
+      - ./:/app
+      - ./target:/app/target   # get surefire/allure results on host
