@@ -19,6 +19,7 @@
     <jackson.version>2.17.1</jackson.version>
     <slf4j.version>2.0.13</slf4j.version>
     <log4j2.version>2.22.1</log4j2.version>
+    <log4j.version>1.2.17</log4j.version>
     <allure.testng.version>2.24.0</allure.testng.version>
     <aspectj.version>1.9.22.1</aspectj.version>
     <restassured.version>5.5.0</restassured.version>
@@ -55,6 +56,13 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>${testng.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
     <!-- AssertJ (tests) -->
     <dependency>
       <groupId>org.assertj</groupId>
@@ -79,7 +87,7 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Logging: log4j2 + slf4j bridge -->
+    <!-- Logging: log4j2 + slf4j bridge  + log4j -->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
@@ -95,6 +103,11 @@
       <artifactId>log4j-slf4j2-impl</artifactId>
       <version>${log4j2.version}</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>${log4j.version}</version>
     </dependency>
 
     <!-- Lombok -->
@@ -127,6 +140,18 @@
       <artifactId>json-schema-validator</artifactId>
       <version>1.4.1</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-java-commons</artifactId>
+      <version>2.28.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.microsoft.playwright</groupId>
+      <artifactId>playwright</artifactId>
+      <version>1.54.0</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 
@@ -163,7 +188,7 @@
         <version>${surefire.version}</version>
         <configuration>
           <useSystemClassLoader>true</useSystemClassLoader>
-          <argLine>@{argLine} -javaagent:${project.build.directory}/aspectjweaver.jar</argLine>
+          <argLine>-javaagent:${project.build.directory}/aspectjweaver.jar</argLine>
           <!-- run your smoke classes by default; or comment this and use -Dtest=... in CI -->
           <!--
           <includes>
