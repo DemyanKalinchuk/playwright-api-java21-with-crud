@@ -1,135 +1,96 @@
-# Playwright API Java 21 CRUD & Auth Framework
+# Playwright API Java 21 CRUD Framework
 
-## 📌 Project Overview
-This project is an **end-to-end API testing framework** built with **Java 21**, **Maven**, and **TestNG**, integrating **RestAssured** for HTTP requests and **Allure** for reporting.  
-It is designed to work with public APIs like **ReqRes** and **JSONPlaceholder** for CRUD and authentication flows.
+## Overview
+This framework is a **Java 21 + Maven + Playwright** API testing solution with full CRUD capabilities and a smoke test suite for rapid validation.  
+It integrates **POJO models**, **Builder pattern**, and a **UseApiSteps** abstraction for clean, maintainable test flows.
 
 ---
 
-## 📂 Framework Structure
+## Framework Structure
 
 ```
-src
- ├─ main/java
- │   ├─ api/
- │   │   ├─ builders/              # POJO builders (AuthBuilder, UserBuilder, PostBuilder)
- │   │   ├─ pojo/                  # DTOs for auth, users, posts
- │   │   └─ steps/UseApiSteps      # Central API steps combining builders and HttpRequest
- │   ├─ config/Config.java         # Environment variables & properties loader
- │   └─ utils/
- │       ├─ json/Json.java         # JSON parsing helpers
- │       └─ request/
- │           ├─ HttpRequest.java   # Core RestAssured API client
- │           ├─ Headers.java       # Header management helper
- │           └─ path/
- │               ├─ IPath.java
- │               └─ WorkPath.java  # Enum-based endpoint definitions
- └─ test/java
-     ├─ tests/auth/                # Auth endpoints tests (login, register)
-     ├─ tests/reqres/              # ReqRes API CRUD tests (users, resources)
-     ├─ tests/jsonplaceholder/     # JSONPlaceholder CRUD tests (posts)
-     └─ tests/smoke/                # API smoke tests pack
+.
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   ├── api
+│   │   │   │   ├── pojo        # POJO classes for request/response bodies
+│   │   │   │   ├── builder     # Builder classes for POJO objects
+│   │   │   │   └── steps       # UseApiSteps with reusable API call logic
+│   │   │   ├── config          # Config class for environment variables & defaults
+│   │   │   └── utils           # Utilities (HTTP requests, constants, helpers)
+│   │   └── resources           # application.properties & configs
+│   ├── test
+│   │   ├── java
+│   │   │   └── smokeTests      # Smoke test pack
+│   │   └── resources           # Test data & TestNG XMLs
+├── pom.xml
+└── README.md
 ```
 
 ---
 
-## 🛠 Technologies Used
-- **Java 21** — Modern Java syntax & features
-- **Maven** — Build & dependency management
-- **TestNG** — Testing framework
-- **RestAssured** — API HTTP client
-- **Lombok** — Reduces boilerplate for POJOs and Builders
-- **Jackson** — JSON (de)serialization
-- **Allure** — Reporting with request/response attachments
-- **Playwright APIRequestContext** — (Optional) Used for direct Playwright API calls
-- **Enum-based Path Management** — Centralized endpoint references
-- **Builder Pattern for POJOs** — Clean payload creation
+## Technologies Used
+- **Java 21** – Core programming language
+- **Maven** – Build & dependency management
+- **Playwright for Java** – HTTP client for API testing
+- **TestNG** – Test execution & grouping
+- **Lombok** – Reduces boilerplate in POJO classes
+- **Jackson** – JSON serialization/deserialization
+- **Rest-Assured** – HTTP request handling for extended flows
+- **Allure** – Test reporting
+- **GitHub Actions** – CI/CD integration
 
 ---
 
-## 📦 Test Packs
+## Test Packs
 
-### 1. **Auth Tests** (`tests/auth`)
-- `AuthLoginIT` — Valid login & invalid login (missing password)
-- `AuthRegisterIT` — Valid register & invalid register (missing password)
+### Smoke Test Suite
+Contains the **critical path** tests for API validation:
 
-### 2. **ReqRes CRUD Tests** (`tests/reqres`)
-- `UsersCrudTest` — Create, Read, Update, Delete user flow
-- `ResourcesTest` — List & single resource retrieval
+1. **`smokeTests.ApiSmokeTests`**  
+   - General API availability checks  
+   - Verifies main endpoints respond with correct status codes and structure  
 
-### 3. **JSONPlaceholder CRUD Tests** (`tests/jsonplaceholder`)
-- `PostsCrudTest` — Create, Read, Update, Delete post flow
+2. **`smokeTests.AuthRegisterTests`**  
+   - Tests user registration scenarios  
+   - Covers both positive and negative flows  
 
-### 4. **Smoke Tests** (`tests/smoke`)
-- `ApiSmokeTest` — Basic health checks for endpoints
+3. **`smokeTests.AuthSmokeTests`**  
+   - Authentication endpoint checks  
+   - Token retrieval and validation scenarios  
 
 ---
 
-## 🔄 Running the Tests
+## How to Run Tests
 
-### 1. Clone the Repository
+### Prerequisites
+- Install **Java 21**
+- Install **Maven 3.9+**
+- (Optional) Install **Allure** CLI for local report viewing
+
+### Run All Smoke Tests
 ```bash
-git clone <your-repo-url>
-cd playwright-api-java21-with-crud
+mvn clean test   -Dtest=smokeTests.ApiSmokeTests,smokeTests.AuthRegisterTests,smokeTests.AuthSmokeTests
 ```
 
-### 2. Configure Environment Variables (Optional)
+### Run Using TestNG Suite
+If you have a `TestStagePropertiesTestNG.xml` file in `src/test/resources`:
 ```bash
-export BASE_URL=https://reqres.in
-export API_TOKEN=reqres-free-v1
-```
-
-Or pass via Maven system properties:
-```bash
-mvn test -DBASE_URL=https://reqres.in -DAPI_TOKEN=reqres-free-v1
-```
-
-### 3. Run Specific Test Packs
-
-#### Run All Auth Tests
-```bash
-mvn test -Dtest=tests.auth.*
-```
-
-#### Run ReqRes CRUD Tests
-```bash
-mvn test -Dtest=tests.reqres.*
-```
-
-#### Run JSONPlaceholder Posts CRUD Tests
-```bash
-mvn test -Dtest=tests.jsonplaceholder.* -DBASE_URL=https://jsonplaceholder.typicode.com
-```
-
-#### Run All Smoke Tests
-```bash
-mvn test -Dtest=tests.smoke.*
-```
-
-### 4. Generate Allure Report
-```bash
-mvn allure:serve
+mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/TestStagePropertiesTestNG.xml
 ```
 
 ---
 
-## 🚀 Features
-- CRUD & Auth flows with public APIs
-- Centralized endpoint management
-- Allure reporting with request/response logs
-- Retry logic for unstable endpoints
-- Flexible config via env variables or Maven params
+## Generating Reports
+After running tests:
+```bash
+allure serve target/allure-results
+```
 
 ---
 
-## 📌 Notes
-- Public demo APIs (ReqRes, JSONPlaceholder) do **not persist data** — GET after POST may not return the created entity.
-- Use **known IDs** from API docs for GET, PUT, DELETE tests when persistence is required.
+## CI/CD
+The project includes a **GitHub Actions** workflow to run smoke tests automatically on pushes and pull requests to `main` or `master`.
 
 ---
-
-## 👨‍💻 Contribution
-Pull requests are welcome! You can extend:
-- More endpoints & negative tests
-- Data-driven tests
-- UI + API integration tests with Playwright
