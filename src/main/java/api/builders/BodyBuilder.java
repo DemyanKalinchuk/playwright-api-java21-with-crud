@@ -1,7 +1,6 @@
 package api.builders;
 
 import api.pojo.auth.dto.AuthRequest;
-import api.pojo.post.Post;
 import api.pojo.users.Address;
 import api.pojo.users.Name;
 import api.pojo.users.User;
@@ -42,17 +41,6 @@ public class BodyBuilder {
                 .updatedAt(String.valueOf(Instant.now()))
                 .build();
     }
-
-
-    // ===== Posts =====
-    public Post buildPost(Integer postId,  String title, String body) {
-        return Post.builder()
-                .id(postId)
-                .title(title)
-                .body(body)
-                .build();
-    }
-
 
     // ====== Auth
     public AuthRequest buildAuthRequest(String email, String password) {

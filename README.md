@@ -90,6 +90,13 @@ mvn allure:serve
 
 ---
 
+## Checking CodeStyle
+Run it for checking your code
+```bash
+mvn checkstyle:checkstyle
+open target/site/checkstyle.html
+```
+
 ## CI/CD
 The project includes a **GitHub Actions** workflow to run smoke tests automatically on pushes and pull requests to `main` or `master`.
 

@@ -6,8 +6,8 @@ import io.restassured.config.SSLConfig;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.testng.internal.collections.Pair;
-import utils.request.path.IPath;
 import utils.request.exception.HttpsException;
+import utils.request.path.IPath;
 
 import java.io.File;
 import java.util.*;
@@ -26,15 +26,15 @@ public class HttpRequest {
     private static final String HEADER_AUTHORIZATION = "Authorization";
     private static final String HEADER_ACCEPT_LANGUAGE = "Accept-Language";
 
-    private final String getResponseType = "GET";
-    private final String postResponseType = "POST";
-    private final String putResponseType = "PUT";
-    private final String deleteResponseType = "DELETE";
-    private final String patchResponseType = "PATCH";
+    private static final String METHOD_GET = "GET";
+    private static final String METHOD_POST = "POST";
+    private static final String METHOD_PUT = "PUT";
+    private static final String METHOD_DELETE = "DELETE";
+    private static final String METHOD_PATCH = "PATCH";
 
     private String baseApiUrl = Config.baseApiUrl();
     private String filesApiUrl = Config.baseFilesApiUrl();
-    private boolean consoleLog = Config.consoleLog();
+    private boolean consoleLogEnabled = Config.consoleLog();
 
     public HttpRequest() {
         RestAssured.config = RestAssured.config().sslConfig(SSLConfig.sslConfig().allowAllHostnames());
@@ -44,38 +44,41 @@ public class HttpRequest {
     public HttpRequest configure(String baseUrl, String filesUrl, boolean console) {
         if (baseUrl != null && !baseUrl.isBlank()) this.baseApiUrl = baseUrl;
         if (filesUrl != null && !filesUrl.isBlank()) this.filesApiUrl = filesUrl;
-        this.consoleLog = console;
+        this.consoleLogEnabled = console;
         return this;
     }
 
     // ---------- Public simple API (String responses) ----------
 
-    public String getRequest(Headers headers, IPath path, String... params) {
-        return sendRequest(getResponseType, baseApiUrl, headers, null, path, params);
-    }
-    public String getBodyRequest(Headers headers, Object body, IPath path, String... params) {
-        return sendRequest(getResponseType, baseApiUrl, headers, body, path, params);
+    public String getRequest(Headers headers, IPath path, String... pathParams) {
+        return sendRequest(METHOD_GET, baseApiUrl, headers, null, path, pathParams);
     }
 
-    public String postRequest(Headers headers, Object body, IPath path, String... params) {
-        return sendRequest(postResponseType, baseApiUrl, headers, body, path, params);
+    public String getBodyRequest(Headers headers, Object requestBody, IPath path, String... pathParams) {
+        return sendRequest(METHOD_GET, baseApiUrl, headers, requestBody, path, pathParams);
     }
 
-    public String putRequest(Headers headers, Object body, IPath path, String... params) {
-        return sendRequest(putResponseType, baseApiUrl, headers, body, path, params);
+    public String postRequest(Headers headers, Object requestBody, IPath path, String... pathParams) {
+        return sendRequest(METHOD_POST, baseApiUrl, headers, requestBody, path, pathParams);
     }
 
-    public String deleteRequest(Headers headers, IPath path, String... params) {
-        return sendRequest(deleteResponseType, baseApiUrl, headers, null, path, params);
+    public String putRequest(Headers headers, Object requestBody, IPath path, String... pathParams) {
+        return sendRequest(METHOD_PUT, baseApiUrl, headers, requestBody, path, pathParams);
+    }
+
+    public String deleteRequest(Headers headers, IPath path, String... pathParams) {
+        return sendRequest(METHOD_DELETE, baseApiUrl, headers, null, path, pathParams);
     }
 
     public Response baseOptionsRequestWithAuthorizedUser(final String bearerToken, final String endpoint) {
-        RequestSpecification spec = given()
+        RequestSpecification requestSpec = given()
                 .header(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON)
                 .header(HEADER_AUTHORIZATION, bearerToken);
-        if (consoleLog) spec.log().all();
-        return spec.when().options(endpoint).then().extract().response();
+        if (consoleLogEnabled) requestSpec.log().all();
+        return requestSpec.when().options(endpoint).then().extract().response();
     }
+
+    // ---------- Multipart upload ----------
 
     public String postRequestForUploadFile(
             final String fileToken,
@@ -83,142 +86,174 @@ public class HttpRequest {
             final List<Pair<String, String>> stringPairsList,
             String endpoint
     ) {
-        var req = given()
+        RequestSpecification requestSpec = given()
                 .header(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON)
                 .header(HEADER_AUTHORIZATION, "Bearer " + fileToken)
                 .contentType("multipart/form-data");
 
-        if (filePairsList != null) filePairsList.forEach(p -> req.multiPart(p.first(), p.second()));
-        if (stringPairsList != null) stringPairsList.forEach(p -> req.multiPart(p.first(), p.second()));
+        if (filePairsList != null) {
+            filePairsList.forEach(pair -> requestSpec.multiPart(pair.first(), pair.second()));
+        }
 
-        if (consoleLog) req.log().all();
+        if (stringPairsList != null) {
+            stringPairsList.forEach(pair -> requestSpec.multiPart(pair.first(), pair.second()));
+        }
 
-        Response response = req.when().post(filesApiUrl + endpoint);
-        String responseAsString = response.then().extract().asString();
+        if (consoleLogEnabled) requestSpec.log().all();
 
-        attach("POST multipart " + endpoint, null, response, responseAsString);
+        Response response = requestSpec.when().post(filesApiUrl + endpoint);
+        String responseBody = response.then().extract().asString();
+
+        attach("POST multipart " + endpoint, null, response, responseBody);
 
         if (!SUCCESS_CODES.contains(response.statusCode())) {
             throw new HttpsException("Bad request: expected = " + SUCCESS_CODES + ", actual = "
-                    + response.statusCode() + "\nError message:\n" + responseAsString);
+                    + response.statusCode() + "\nError message:\n" + responseBody);
         }
-        return responseAsString;
+        return responseBody;
     }
 
     // ---------- Core sendRequest with retry/backoff & Allure hook ----------
 
-    private String sendRequest(String method, String baseUrl, Headers headers, Object body, IPath rawPath, String... params) {
-        String path = formatPath(rawPath, params);
+    private String sendRequest(String httpMethod,
+                               String baseUrl,
+                               Headers headers,
+                               Object requestBody,
+                               IPath pathTemplate,
+                               String... pathParams) {
 
-        RequestSpecification req = given()
+        String path = formatPath(pathTemplate, pathParams);
+
+        RequestSpecification requestSpec = given()
                 .config(RestAssured.config().sslConfig(SSLConfig.sslConfig().relaxedHTTPSValidation()))
                 .headers(mergedHeaders(headers))
                 .contentType(CONTENT_TYPE_JSON);
 
-        if (body != null) req.body(body);
-        if (consoleLog) req.log().all();
+        if (requestBody != null) requestSpec.body(requestBody);
+        if (consoleLogEnabled) requestSpec.log().all();
 
-        Supplier<Response> call = () -> invoke(method, req, baseUrl + path);
+        Supplier<Response> invokeSupplier = () -> invoke(httpMethod, requestSpec, baseUrl + path);
 
-        int attempts = 0;
-        int max = Math.max(0, Config.retryMax());
-        long delay = 500;
-        Response resp;
+        int attempt = 0;
+        int maxAttempts = Math.max(0, Config.retryMax());
+        long backoffMillis = 500;
+        Response response;
 
         while (true) {
-            attempts++;
-            resp = call.get();
+            attempt++;
+            response = invokeSupplier.get();
 
-            if (consoleLog) System.out.println(method + " " + rawPath.getDescription() + " -> " + resp.statusCode());
+            if (consoleLogEnabled) {
+                System.out.println(httpMethod + " " + pathTemplate.getDescription() + " -> " + response.statusCode());
+            }
 
-            if (!RETRYABLE_CODES.contains(resp.statusCode()) || attempts > max) break;
+            if (!RETRYABLE_CODES.contains(response.statusCode()) || attempt > maxAttempts) {
+                break;
+            }
 
-            sleep(delay);
-            delay = Math.min(delay * 2, 4000);
+            sleep(backoffMillis);
+            backoffMillis = Math.min(backoffMillis * 2, 4000);
         }
 
-        String bodyStr = safeString(body);
-        String response = resp.then().extract().asString();
-        attach(method + " " + path, bodyStr, resp, response);
+        String requestBodyMasked = safeString(requestBody);
+        String responseBody = response.then().extract().asString();
+        attach(httpMethod + " " + path, requestBodyMasked, response, responseBody);
 
-        String ct = Optional.ofNullable(resp.getHeader("Content-Type")).orElse("");
-        boolean html = ct.contains("text/html") || response.startsWith("<!DOCTYPE");
-        String hint = html ? "\nHint: Response is HTML — check BASE_URL vs endpoint (e.g., /posts is JSONPlaceholder, not ReqRes)." : "";
-        if (!SUCCESS_CODES.contains(resp.statusCode())) {
+        String contentType = Optional.ofNullable(response.getHeader("Content-Type")).orElse("");
+        boolean looksLikeHtml = contentType.contains("text/html") || responseBody.startsWith("<!DOCTYPE");
+        String hint = looksLikeHtml
+                ? "\nHint: Response is HTML — check BASE_URL vs endpoint (e.g., /posts is JSONPlaceholder, not ReqRes)."
+                : "";
+
+        if (!SUCCESS_CODES.contains(response.statusCode())) {
             throw new HttpsException("Bad request: expected status_code = " + SUCCESS_CODES +
-                    ", actual = " + resp.statusCode() + "\nError message:\n" + response + hint);
+                    ", actual = " + response.statusCode() + "\nError message:\n" + responseBody + hint);
+        }
+
+        return responseBody;
+    }
+
+    /** Raw POST for negative tests (no success check; returns Response). */
+    public Response sendRequestDto(Headers headers, Object requestBody, IPath path, String... pathParams) {
+        String url = baseApiUrl + formatPath(path, pathParams);
+
+        RequestSpecification requestSpec = given()
+                .config(RestAssured.config().sslConfig(SSLConfig.sslConfig().relaxedHTTPSValidation()))
+                .headers(mergedHeaders(headers))
+                .contentType(CONTENT_TYPE_JSON);
+
+        if (requestBody != null) requestSpec.body(requestBody);
+        if (consoleLogEnabled) requestSpec.log().all();
+
+        Response response = requestSpec.post(url);
+
+        try {
+            String responseBody = response.then().extract().asString();
+            attach("POST " + url,
+                    (requestBody == null ? "(no body)" : String.valueOf(requestBody)),
+                    response,
+                    responseBody);
+        } catch (Throwable ignored) {
+            // no-op if Allure helper isn't present
         }
 
         return response;
     }
 
-    public Response sendRequestDto(Headers headers, Object body, IPath path, String... params) {
-        String url = baseApiUrl + formatPath(path, params);
+    private Map<String, Object> mergedHeaders(Headers customHeaders) {
+        Map<String, Object> merged = new LinkedHashMap<>();
 
-        RequestSpecification req = given()
-                .config(RestAssured.config().sslConfig(SSLConfig.sslConfig().relaxedHTTPSValidation()))
-                .headers(mergedHeaders(headers))
-                .contentType(CONTENT_TYPE_JSON);
+        merged.put(HEADER_ACCEPT_LANGUAGE, Config.acceptLang());
+        merged.put(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON);
 
-        if (body != null) req.body(body);
-        if (consoleLog) req.log().all();
-
-        Response resp = req.post(url);
-
-        try {
-            String responseBody = resp.then().extract().asString();
-            attach("POST " + url, (body == null ? "(no body)" : String.valueOf(body)), resp, responseBody);
-        } catch (Throwable ignored) {}
-
-        return resp;
-    }
-
-    private Map<String, Object> mergedHeaders(Headers headers) {
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put(HEADER_ACCEPT_LANGUAGE, Config.acceptLang());
-        map.put(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON);
-
-        String token = Config.bearer();
-        if (!token.isBlank()) map.put(HEADER_AUTHORIZATION, "Bearer " + token);
-
-        if (headers != null && headers.getSize() != 0) {
-            String[] kv = headers.getHeader();
-            map.put(kv[0], kv[1]);
+        String bearerToken = Config.bearer();
+        if (bearerToken != null && !bearerToken.isBlank()) {
+            merged.put(HEADER_AUTHORIZATION, "Bearer " + bearerToken);
         }
-        return map;
+
+        if (customHeaders != null && customHeaders.getSize() != 0) {
+            String[] headerKeyValue = customHeaders.getHeader();
+            merged.put(headerKeyValue[0], headerKeyValue[1]);
+        }
+        return merged;
     }
 
-    private Response invoke(String method, RequestSpecification req, String url) {
-        return switch (method) {
-            case postResponseType -> req.post(url);
-            case putResponseType  -> req.put(url);
-            case patchResponseType -> req.patch(url);
-            case deleteResponseType -> req.delete(url);
-            default     -> req.get(url);
+    private Response invoke(String httpMethod, RequestSpecification requestSpec, String url) {
+        return switch (httpMethod) {
+            case METHOD_POST   -> requestSpec.post(url);
+            case METHOD_PUT    -> requestSpec.put(url);
+            case METHOD_PATCH  -> requestSpec.patch(url);
+            case METHOD_DELETE -> requestSpec.delete(url);
+            default            -> requestSpec.get(url);
         };
     }
 
-    private static String formatPath(IPath path, String... params) {
-        String result = path.url();
-        for (String p : params) result = result.replaceFirst("%s", p);
-        return result;
+    private static String formatPath(IPath path, String... pathParams) {
+        String formatted = path.url();
+        for (String param : pathParams) {
+            formatted = formatted.replaceFirst("%s", param);
+        }
+        return formatted;
     }
 
-    private static void sleep(long ms) {
-        try { Thread.sleep(ms); }
-        catch (InterruptedException e) { Thread.currentThread().interrupt(); throw new RuntimeException(e); }
-    }
-
-    private static String safeString(Object o) {
-        return (o == null) ? "(no body)" : String.valueOf(o);
-    }
-
-    private void attach(String title, String requestBody, Response resp, String respBody) {
+    private static void sleep(long milliseconds) {
         try {
-            // mask basic sensitive artifacts
-            String reqMasked = Sensitive.mask(requestBody);
-            String respMasked = Sensitive.mask(respBody);
-            addAttachmentToReport("HTTP: " + title, getAllureReportMessage(resp, respMasked, reqMasked, title));
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static String safeString(Object object) {
+        return (object == null) ? "(no body)" : String.valueOf(object);
+    }
+
+    private void attach(String title, String requestBody, Response response, String responseBody) {
+        try {
+            String maskedRequest = Sensitive.mask(requestBody);
+            String maskedResponse = Sensitive.mask(responseBody);
+            addAttachmentToReport("HTTP: " + title, getAllureReportMessage(response, maskedResponse, maskedRequest, title));
         } catch (Throwable ignored) {
             // no-op if Allure helper isn't present
         }
@@ -226,9 +261,9 @@ public class HttpRequest {
 
     /** Minimal built-in masking to avoid leaking tokens/emails if AllureHelper not used elsewhere */
     private static final class Sensitive {
-        private static String mask(String s) {
-            if (s == null) return null;
-            return s.replaceAll("(?i)Bearer\\s+[A-Za-z0-9._-]+", "Bearer ****")
+        private static String mask(String text) {
+            if (text == null) return null;
+            return text.replaceAll("(?i)Bearer\\s+[A-Za-z0-9._-]+", "Bearer ****")
                     .replaceAll("([\\w.%+-])([\\w.%+-]*)(@[^\\s\"']+)", "$1***$3");
         }
     }

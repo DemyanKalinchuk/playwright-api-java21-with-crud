@@ -28,12 +28,13 @@ public final class Json {
         }
     }
 
-    public static String getAsText(Object bodyOrResponse, String field) {
-        var node = parse(bodyOrResponse);
-        var f = node.get(field);
-        if (f == null || f.isNull())
-            throw new IllegalArgumentException("JSON field '" + field + "' is missing or null.");
-        return f.asText();
+    public static String getAsText(Object bodyOrResponse, String fieldName) {
+        JsonNode root = parse(bodyOrResponse);
+        JsonNode field = root.get(fieldName);
+        if (field == null || field.isNull()) {
+            throw new IllegalArgumentException("JSON field '" + fieldName + "' is missing or null.");
+        }
+        return field.asText();
     }
 
     /**

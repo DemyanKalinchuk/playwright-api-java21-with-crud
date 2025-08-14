@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.extern.jackson.Jacksonized;
 
-import java.time.Instant;
-
 @Data
 @Builder
 @Jacksonized
