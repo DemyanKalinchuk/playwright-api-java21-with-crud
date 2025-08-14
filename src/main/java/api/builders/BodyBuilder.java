@@ -1,6 +1,6 @@
 package api.builders;
 
-import api.pojo.auth.AuthRequest;
+import api.pojo.auth.dto.AuthRequest;
 import api.pojo.post.Post;
 import api.pojo.users.Address;
 import api.pojo.users.Name;

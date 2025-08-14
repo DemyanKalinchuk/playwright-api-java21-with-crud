@@ -1,8 +1,10 @@
 package smokeTests;
 
+import api.pojo.auth.dto.NegativeAuthFlow;
+import api.pojo.auth.dto.RegisterResponse;
 import api.steps.UseApiSteps;
+import io.restassured.response.Response;
 import org.testng.annotations.Test;
-import utils.json.Json;
 import utils.request.exception.HttpsException;
 
 import static core.TestStepLogger.logStep;
@@ -12,24 +14,19 @@ public class AuthRegisterTests {
     private final UseApiSteps steps = new UseApiSteps();
 
     @Test(description = "Try to register with positive data")
-    public void registerTest() {
-        logStep("Try to register with cred's");
-        String body = steps.register("eve.holt@reqres.in", "pistol");
-
-        logStep("Get created user");
-        String id = Json.getAsText(body, "id");
-        String token = Json.getAsText(body, "token");
-
-        logStep("Check an errors");
-        assertNotNull(id, "id should be present on successful registration");
-        assertNotNull(token, "token should be present on successful registration");
+    public void registerTestAndReturnIdAndTokenDto() {
+        RegisterResponse resp = steps.registerDto("eve.holt@reqres.in", "pistol");
+        assertNotNull(resp.getId(), "id should be present");
+        assertNotNull(resp.getToken(), "token should be present");
+        assertTrue(resp.getId() > 0, "id should be positive");
+        assertFalse(resp.getToken().isBlank(), "token should not be blank");
     }
 
     @Test(description = "Try to register with negative data")
     public void registerWithoutPassTest() {
         try {
             logStep("Try to register without pass");
-            steps.register("sydney@fife", null);
+            steps.registerDto("sydney@fife", null);
 
             logStep("Check an error");
             fail("Expected HttpsException (400) for missing password");
@@ -40,5 +37,28 @@ public class AuthRegisterTests {
             assertTrue(msg.toLowerCase().contains("missing password"),
                     "Error body should mention 'Missing password'. Actual: " + msg);
         }
+    }
+
+    @Test
+    public void registerFlowWithMissingPasswordAndChecking400StatusCodeTest() {
+        Response resp = steps.registerRaw("sydney@fife", null); // missing password case from ReqRes docs
+        assertEquals(resp.statusCode(), 400, "Expected 400 Bad Request");
+
+        NegativeAuthFlow errorDto = steps.registerErrorDto("sydney@fife", null);
+        assertNotNull(errorDto.getError(), "Error message should be present");
+        assertTrue(errorDto.getError().toLowerCase().contains("missing password"),
+                "Unexpected error: " + errorDto.getError());
+    }
+
+    @Test
+    public void registerFlowWithMissingEmailAndChecking400StatusCodeTest() {
+        Response resp = steps.registerRaw(null, "pistol"); // missing email/username
+        assertEquals(resp.statusCode(), 400, "Expected 400 Bad Request");
+
+        NegativeAuthFlow errorDto = steps.registerErrorDto(null, "pistol");
+        assertNotNull(errorDto.getError(), "Error message should be present");
+        // ReqRes typically: "Missing email or username"
+        assertTrue(errorDto.getError().toLowerCase().contains("missing"),
+                "Unexpected error: " + errorDto.getError());
     }
 }

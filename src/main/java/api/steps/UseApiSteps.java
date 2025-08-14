@@ -1,14 +1,16 @@
 package api.steps;
 
 import api.builders.BodyBuilder;
-import api.pojo.post.Post;
+import api.pojo.auth.dto.AuthRequest;
+import api.pojo.auth.dto.NegativeAuthFlow;
+import api.pojo.auth.dto.RegisterResponse;
 import api.pojo.users.User;
+import io.restassured.response.Response;
 import utils.json.Json;
 import utils.request.Headers;
 import utils.request.HttpRequest;
 
 import static utils.base.Base.testCred;
-import static utils.json.Json.getAsText;
 import static utils.request.path.WorkPath.*;
 
 public class UseApiSteps {
@@ -47,9 +49,27 @@ public class UseApiSteps {
         return http.postRequest(new Headers().addAuthHeader(testCred.baseApiToken()), body, LOGIN);
     }
 
-    public String register(String email, String password) {
-        var body = bodyBuilder.buildAuthRequest(email, password);
-        return http.postRequest(new Headers().addAuthHeader(testCred.baseApiToken()), body, REGISTER);
+    /** DTO variant just for AuthRegisterTests */
+    public RegisterResponse registerDto(String email, String password) {
+        AuthRequest body = AuthRequest.builder()
+                .email(email)
+                .password(password)
+                .build();
+        String json = http.postRequest(new Headers().addAuthHeader(testCred.baseApiToken()), body, REGISTER);
+        return Json.read(json, RegisterResponse.class); // <--- new DTO reader
     }
+
+    public Response registerRaw(String email, String password) {
+        AuthRequest body = AuthRequest.builder().email(email).password(password).build();
+        return http.sendRequestDto(new Headers().addAuthHeader(testCred.baseApiToken()), body, REGISTER);
+    }
+
+    public NegativeAuthFlow registerErrorDto(String email, String password) {
+        Response resp = registerRaw(email, password);
+        // Expecting 400 with JSON {"error": "..."}
+        return Json.read(resp, NegativeAuthFlow.class);
+    }
+
+
 
 }

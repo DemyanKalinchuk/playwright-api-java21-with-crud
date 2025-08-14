@@ -1,13 +1,13 @@
-package api.pojo.auth;
+package api.pojo.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
+import lombok.NoArgsConstructor;
 
-@Data
-@Builder
-@NonNull
+@Data @Builder
+@NoArgsConstructor @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AuthRequest {
     private String email;

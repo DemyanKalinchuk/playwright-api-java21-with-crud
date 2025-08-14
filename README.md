@@ -85,7 +85,7 @@ mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/TestStagePropertiesTe
 ## Generating Reports
 After running tests:
 ```bash
-allure serve target/allure-results
+mvn allure:serve
 ```
 
 ---

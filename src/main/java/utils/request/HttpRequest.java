@@ -152,6 +152,27 @@ public class HttpRequest {
         return response;
     }
 
+    public Response sendRequestDto(Headers headers, Object body, IPath path, String... params) {
+        String url = baseApiUrl + formatPath(path, params);
+
+        RequestSpecification req = given()
+                .config(RestAssured.config().sslConfig(SSLConfig.sslConfig().relaxedHTTPSValidation()))
+                .headers(mergedHeaders(headers))
+                .contentType(CONTENT_TYPE_JSON);
+
+        if (body != null) req.body(body);
+        if (consoleLog) req.log().all();
+
+        Response resp = req.post(url);
+
+        try {
+            String responseBody = resp.then().extract().asString();
+            attach("POST " + url, (body == null ? "(no body)" : String.valueOf(body)), resp, responseBody);
+        } catch (Throwable ignored) {}
+
+        return resp;
+    }
+
     private Map<String, Object> mergedHeaders(Headers headers) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put(HEADER_ACCEPT_LANGUAGE, Config.acceptLang());

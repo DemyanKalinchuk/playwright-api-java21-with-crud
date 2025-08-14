@@ -3,12 +3,18 @@ package config;
 import static utils.base.Base.testCred;
 
 public final class Config {
-    private Config() {}
-    private static String get(String k, String def) {
-        var env = System.getenv(k);
-        if (env != null && !env.isBlank()) return env;
-        var prop = System.getProperty(k);
-        return (prop != null && !prop.isBlank()) ? prop : def;
+    private static String get(String key, String defaultValue) {
+        String envValue = System.getenv(key);
+        if (envValue != null && !envValue.isBlank()) {
+            return envValue;
+        }
+
+        String systemPropertyValue = System.getProperty(key);
+        if (systemPropertyValue != null && !systemPropertyValue.isBlank()) {
+            return systemPropertyValue;
+        }
+
+        return defaultValue;
     }
     public static String baseApiUrl()      { return get("BASE_URL", testCred.baseApiUrl()); }
     public static String baseFilesApiUrl() { return get("FILES_BASE_URL", baseApiUrl()); }
